@@ -5,6 +5,13 @@ ehthumbs.db
 # Folder config file
 Desktop.ini
 
+# Server Ignore
+*bin/
+*.gradle
+*.settings
+*.gitattributes
+*.gitignore
+
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
