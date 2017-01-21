@@ -22,11 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs;
+package com.quavo;
+
+import com.quavo.osrs.network.NetworkExecutor;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class Server {
+public final class Quavo {
+
+	/**
+	 * The version of the server.
+	 */
+	public static final int VERSION = 103;
+
+	/**
+	 * Starts the application.
+	 * 
+	 * @param args Runtime arguments.
+	 */
+	public static void main(String[] args) {
+		System.out.println("Welcome to Quavo!");
+		System.out.println("An open source OSRS emulation server aimed to be fast and informative.");
+
+		// Start the network.
+		NetworkExecutor.start();
+
+		System.gc();
+		System.out.println("Online!");
+	}
 
 }

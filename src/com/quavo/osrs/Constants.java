@@ -22,15 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo;
+package com.quavo.osrs;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class Main {
+public final class Constants {
 
-	public static void main(String[] args) {
-		System.out.println("Running...");
-	}
+	/**
+	 * The host address the server binds to.
+	 */
+	public static final String HOST_NAME = "127.0.0.1";
+
+	/**
+	 * The port the server binds to.
+	 */
+	public static final int HOST_PORT = 43594;
 
 }
