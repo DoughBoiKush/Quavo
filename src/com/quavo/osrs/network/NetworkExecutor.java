@@ -25,9 +25,12 @@
 package com.quavo.osrs.network;
 
 import com.quavo.osrs.Constants;
+import com.quavo.osrs.network.protocol.codec.connection.ConnectionDecoder;
+import com.quavo.osrs.network.protocol.codec.connection.ConnectionEncoder;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -48,26 +51,29 @@ public final class NetworkExecutor {
 		EventLoopGroup boss = new NioEventLoopGroup();
 		EventLoopGroup worker = new NioEventLoopGroup();
 		ServerBootstrap bootstrap = new ServerBootstrap();
-		
+
 		bootstrap.group(boss, worker);
 		bootstrap.channel(NioServerSocketChannel.class);
-        bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+		bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
 
 			@Override
 			protected void initChannel(SocketChannel ch) throws Exception {
-				// TODO Auto-generated method stub
-				
+				ChannelPipeline pipeline = ch.pipeline();
+
+				pipeline.addLast("decoder", new ConnectionDecoder());
+				pipeline.addLast("encoder", new ConnectionEncoder());
+				pipeline.addLast("adapter", new NetworkMessageHandler());
 			}
-        	
-        });
-        
-        try {
+
+		});
+
+		try {
 			bootstrap.bind(Constants.HOST_NAME, Constants.HOST_PORT).sync();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        
-        System.out.println("Server successfully bootstrapped on port " + Constants.HOST_PORT + " and address " + Constants.HOST_NAME + ".");
+
+		System.out.println("Server successfully bootstrapped on port " + Constants.HOST_PORT + " and address " + Constants.HOST_NAME + ".");
 	}
 
 }

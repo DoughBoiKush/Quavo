@@ -22,34 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo;
+package com.quavo.osrs.network.protocol.codec.connection;
 
-import com.quavo.osrs.network.NetworkExecutor;
+import java.util.List;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class Quavo {
+public final class ConnectionDecoder extends ByteToMessageDecoder {
 
-	/**
-	 * The version of the server.
-	 */
-	public static final int VERSION = 131;
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		if (!in.isReadable()) {
+			return;
+		}
 
-	/**
-	 * Starts the application.
-	 * 
-	 * @param args Runtime arguments.
-	 */
-	public static void main(String[] args) {
-		System.out.println("Welcome to Quavo!");
-		System.out.println("An open source OSRS emulation server aimed to be fast and informative.");
-
-		// Start the network.
-		NetworkExecutor.start();
-
-		System.gc();
-		System.out.println("Online!");
+		int id = in.readUnsignedByte();
+		System.out.println(id);
 	}
 
 }
