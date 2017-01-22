@@ -22,15 +22,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo;
+package com.quavo.osrs.network.handler.inbound;
+
+import com.quavo.osrs.network.handler.NetworkMessage;
+import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
+
+import io.netty.channel.ChannelHandler;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class Main {
+public final class ConnectionRequest extends NetworkMessage {
 
-	public static void main(String[] args) {
-		System.out.println("Running...");
+	/**
+	 * The {@link ConnectionType} requested by a connected game client.
+	 */
+	private final ConnectionType type;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param handler The {@link ChannelHandler} used for this request.
+	 * @param type The {@link ConnectionType}.
+	 */
+	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
+		super(handler);
+		this.type = type;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public ConnectionType getType() {
+		return type;
 	}
 
 }

@@ -11,6 +11,7 @@ Desktop.ini
 *.settings
 *.gitattributes
 *.gitignore
+*repo/
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
