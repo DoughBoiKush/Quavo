@@ -28,11 +28,16 @@ package com.quavo.osrs;
  * @author _jordan <citellumrsps@gmail.com>
  */
 public final class Constants {
-	
+
 	/**
-     * The package presentation.
-     */
-    public static final String PRESENTATION = "com.quavo.osrs";
+	 * The package presentation.
+	 */
+	public static final String PRESENTATION = "com.quavo.osrs";
+
+	/**
+	 * The default path of the cache.
+	 */
+	public static final String CACHE_PATH = "./repo/cache/";
 
 	/**
 	 * The host address the server binds to.

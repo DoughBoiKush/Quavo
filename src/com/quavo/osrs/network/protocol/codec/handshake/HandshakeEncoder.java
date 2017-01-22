@@ -28,6 +28,7 @@ import com.quavo.osrs.network.handler.outbound.HandshakeResponse;
 import com.quavo.osrs.network.protocol.ClientMessage;
 import com.quavo.osrs.network.protocol.codec.update.UpdateDecoder;
 import com.quavo.osrs.network.protocol.codec.update.UpdateEncoder;
+import com.quavo.osrs.network.protocol.codec.update.encrypt.XOREncryptionEncoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -50,14 +51,14 @@ public final class HandshakeEncoder extends MessageToByteEncoder<HandshakeRespon
 	protected void encode(ChannelHandlerContext ctx, HandshakeResponse msg, ByteBuf out) throws Exception {
 		ChannelPipeline pipeline = ctx.pipeline();
 		ClientMessage message = msg.getMessage();
-		
+
 		out.writeByte(message.getId());
 		if (message == ClientMessage.SUCCESSFUL_CONNECTION) {
-			//pipeline.addAfter("handshake.decoder", "xor.encrypt", ); TODO
-			pipeline.addAfter("handshake.decoder", "update.encoder", new UpdateEncoder());
+			pipeline.addAfter("handshake.decoder", "xor.encrypt", new XOREncryptionEncoder());
+			pipeline.addAfter("xor.encrypt", "update.encoder", new UpdateEncoder());
 			pipeline.replace("handshake.decoder", "update.decoder", new UpdateDecoder());
 		}
-		
+
 		pipeline.remove(this);
 	}
 

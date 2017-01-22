@@ -24,10 +24,17 @@
  */
 package com.quavo.osrs.network.handler.listener;
 
+import java.io.IOException;
+
 import com.quavo.osrs.network.handler.NetworkMessageListener;
 import com.quavo.osrs.network.handler.inbound.UpdateRequest;
+import com.quavo.osrs.network.handler.outbound.UpdateResponse;
+import com.quavo.osrs.network.protocol.cache.CacheManager;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import net.openrs.cache.Cache;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -36,8 +43,25 @@ public final class UpdateListener implements NetworkMessageListener<UpdateReques
 
 	@Override
 	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		// TODO Auto-generated method stub
-		
+		Cache cache = CacheManager.getCache();
+		int type = msg.getType();
+		int id = msg.getId();
+		ByteBuf container = null;
+
+		try {
+			if (type == 0xff && id == 0xff) {
+				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
+			} else {
+				container = Unpooled.wrappedBuffer(cache.getStore().read(type, id));
+				if (type != 0xff) {
+					container = container.slice(0, container.readableBytes() - 2);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		ctx.writeAndFlush(new UpdateResponse(type, id, msg.isPriority(), container));
 	}
 
 }

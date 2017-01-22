@@ -31,63 +31,31 @@ import io.netty.channel.ChannelHandler;
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateRequest extends NetworkMessage {
+public final class XOREncryptionRequest extends NetworkMessage {
 
 	/**
-	 * The file type request.
+	 * The encrypted key for an update request.
 	 */
-	private final int type;
-
-	/**
-	 * The id of the file request.
-	 */
-	private final int id;
-
-	/**
-	 * The priority of the request.
-	 */
-	private final boolean priority;
+	private final int key;
 
 	/**
 	 * Constructs a new object.
 	 * 
 	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The file type request.
-	 * @param id The file id request.
-	 * @param priority The priority of the request.
+	 * @param key The encryption key.
 	 */
-	public UpdateRequest(ChannelHandler handler, int type, int id, boolean priority) {
+	public XOREncryptionRequest(ChannelHandler handler, int key) {
 		super(handler);
-		this.type = type;
-		this.id = id;
-		this.priority = priority;
+		this.key = key;
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets the key.
 	 * 
-	 * @return the type
+	 * @return the key
 	 */
-	public int getType() {
-		return type;
-	}
-
-	/**
-	 * Gets the id.
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the priority.
-	 * 
-	 * @return the priority
-	 */
-	public boolean isPriority() {
-		return priority;
+	public int getKey() {
+		return key;
 	}
 
 }

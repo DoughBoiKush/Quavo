@@ -43,7 +43,7 @@ public final class HandshakeListener implements NetworkMessageListener<Handshake
 		if (msg.getVersion() != Quavo.VERSION) {
 			message = ClientMessage.OUT_OF_DATE;
 		}
-		
+
 		ctx.writeAndFlush(new HandshakeResponse(message));
 	}
 

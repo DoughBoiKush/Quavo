@@ -48,14 +48,14 @@ public final class ConnectionEncoder extends MessageToByteEncoder<ConnectionResp
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ConnectionResponse msg, ByteBuf out) throws Exception {
 		ChannelPipeline pipeline = ctx.pipeline();
-		
+
 		switch (msg.getType()) {
 		case HANDSHAKE_CONNECTION:
 			pipeline.addAfter("decoder", "handshake.encoder", new HandshakeEncoder());
-            pipeline.replace("decoder", "handshake.decoder", new HandshakeDecoder());
+			pipeline.replace("decoder", "handshake.decoder", new HandshakeDecoder());
 			break;
 		}
-		
+
 		pipeline.remove(this);
 	}
 

@@ -22,72 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.handler.listener;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
+import com.quavo.osrs.network.handler.NetworkMessageListener;
+import com.quavo.osrs.network.handler.inbound.XOREncryptionRequest;
+import com.quavo.osrs.network.handler.outbound.XOREncryptionResponse;
 
-import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateRequest extends NetworkMessage {
+public final class XOREncryptionListener implements NetworkMessageListener<XOREncryptionRequest> {
 
-	/**
-	 * The file type request.
-	 */
-	private final int type;
-
-	/**
-	 * The id of the file request.
-	 */
-	private final int id;
-
-	/**
-	 * The priority of the request.
-	 */
-	private final boolean priority;
-
-	/**
-	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The file type request.
-	 * @param id The file id request.
-	 * @param priority The priority of the request.
-	 */
-	public UpdateRequest(ChannelHandler handler, int type, int id, boolean priority) {
-		super(handler);
-		this.type = type;
-		this.id = id;
-		this.priority = priority;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public int getType() {
-		return type;
-	}
-
-	/**
-	 * Gets the id.
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the priority.
-	 * 
-	 * @return the priority
-	 */
-	public boolean isPriority() {
-		return priority;
+	@Override
+	public void handleMessage(ChannelHandlerContext ctx, XOREncryptionRequest msg) {
+		ctx.writeAndFlush(new XOREncryptionResponse(msg.getKey()));
 	}
 
 }

@@ -38,26 +38,26 @@ import com.quavo.osrs.Constants;
  * @author _jordan <citellumrsps@gmail.com>
  */
 public final class FileUtilities {
-	
+
 	/**
-     * Gets the class files inside a directory.
-     *
-     * @param directory The directory.
-     * @return An array of classes.
-     * @throws IOException            If an I/O exception is thrown.
-     * @throws ClassNotFoundException If the class is not found.
-     */
-    public static Class<?>[] getAllClasses(String directory) throws IOException, ClassNotFoundException {
-        String path = Constants.OUTPUT_DIRECTORY + "/" + directory.replace('.', '/') + "/";
-        File dir = new File(path);
-        List<Class<?>> classes = new ArrayList<>();
-        List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-        for (File file : files) {
-            if (file.getName().endsWith(".class")) {
-                classes.add(Class.forName(file.getParent().replace("\\", ".").replace(Constants.OUTPUT_DIRECTORY + ".", "") + '.' + file.getName().substring(0, file.getName().length() - 6)));
-            }
-        }
-        return classes.toArray(new Class[classes.size()]);
-    }
+	 * Gets the class files inside a directory.
+	 *
+	 * @param directory The directory.
+	 * @return An array of classes.
+	 * @throws IOException If an I/O exception is thrown.
+	 * @throws ClassNotFoundException If the class is not found.
+	 */
+	public static Class<?>[] getAllClasses(String directory) throws IOException, ClassNotFoundException {
+		String path = Constants.OUTPUT_DIRECTORY + "/" + directory.replace('.', '/') + "/";
+		File dir = new File(path);
+		List<Class<?>> classes = new ArrayList<>();
+		List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for (File file : files) {
+			if (file.getName().endsWith(".class")) {
+				classes.add(Class.forName(file.getParent().replace("\\", ".").replace(Constants.OUTPUT_DIRECTORY + ".", "") + '.' + file.getName().substring(0, file.getName().length() - 6)));
+			}
+		}
+		return classes.toArray(new Class[classes.size()]);
+	}
 
 }

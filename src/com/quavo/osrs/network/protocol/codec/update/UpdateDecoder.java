@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.quavo.osrs.network.handler.inbound.UpdateRequest;
+import com.quavo.osrs.network.handler.inbound.XOREncryptionRequest;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -43,7 +44,7 @@ public final class UpdateDecoder extends ByteToMessageDecoder {
 		if (!in.isReadable() || in.readableBytes() < 4) {
 			return;
 		}
-		
+
 		Optional<UpdateType> request = UpdateType.getType(in.readUnsignedByte());
 		if (request.isPresent()) {
 			UpdateType updateType = request.get();
@@ -52,14 +53,14 @@ public final class UpdateDecoder extends ByteToMessageDecoder {
 			case HIGH_PRIORITY_UPDATE:
 				int uid = in.readUnsignedMedium();
 				int type = (uid >> 16);
-				int file = (uid & 0xfff);
-				
-				out.add(new UpdateRequest(this, type, file, updateType == UpdateType.HIGH_PRIORITY_UPDATE));
+				int id = (uid & 0xfff);
+
+				out.add(new UpdateRequest(this, type, id, updateType == UpdateType.HIGH_PRIORITY_UPDATE));
 				break;
 			case XOR_ENCRYPTION_UPDATE:
 				int key = in.readUnsignedByte();
 				in.readUnsignedShort();
-				System.out.println(key);
+				out.add(new XOREncryptionRequest(this, key));
 				break;
 			}
 		} else {

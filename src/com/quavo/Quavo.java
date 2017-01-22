@@ -26,6 +26,7 @@ package com.quavo;
 
 import com.quavo.osrs.network.NetworkExecutor;
 import com.quavo.osrs.network.handler.NetworkMessageRepository;
+import com.quavo.osrs.network.protocol.cache.CacheManager;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -45,7 +46,8 @@ public final class Quavo {
 	public static void main(String[] args) {
 		System.out.println("Welcome to Quavo!");
 		System.out.println("An open source OSRS emulation server aimed to be fast and informative.");
-		
+
+		CacheManager.load();
 		System.out.println("Registered " + NetworkMessageRepository.getListeners().size() + " network listener(s).");
 
 		// Start the network.

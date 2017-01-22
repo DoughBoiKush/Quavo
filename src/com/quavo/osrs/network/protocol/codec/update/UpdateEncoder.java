@@ -44,8 +44,32 @@ public final class UpdateEncoder extends MessageToByteEncoder<UpdateResponse> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, UpdateResponse msg, ByteBuf out) throws Exception {
-		// TODO Auto-generated method stub
+		int type = msg.getType();
+		int id = msg.getId();
+		ByteBuf container = msg.getContainer();
 
+		int compression = container.readUnsignedByte();
+		int length = container.readInt();
+
+		out.writeByte(type);
+		out.writeShort(id);
+		out.writeByte(compression);
+		out.writeInt(length);
+
+		int bytes = container.readableBytes();
+		if (bytes > 504) {
+			bytes = 504;
+		}
+		out.writeBytes(container.readBytes(bytes));
+		while ((bytes = container.readableBytes()) != 0) {
+			if (bytes == 0) {
+				break;
+			} else if (bytes > 511) {
+				bytes = 511;
+			}
+			out.writeByte(0xff);
+			out.writeBytes(container.readBytes(bytes));
+		}
 	}
 
 }

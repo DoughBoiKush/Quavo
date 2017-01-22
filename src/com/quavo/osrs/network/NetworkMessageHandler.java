@@ -55,7 +55,7 @@ public final class NetworkMessageHandler extends SimpleChannelInboundHandler<Net
 
 		// remove from the channel.
 		if (pipeline.context(handler) != null) {
-			pipeline.remove(handler);
+			// pipeline.remove(handler);
 		}
 	}
 

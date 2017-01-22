@@ -22,72 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.protocol.codec.update.encrypt;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
+import com.quavo.osrs.network.handler.outbound.XOREncryptionResponse;
 
-import io.netty.channel.ChannelHandler;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateRequest extends NetworkMessage {
+public final class XOREncryptionEncoder extends MessageToByteEncoder<XOREncryptionResponse> {
 
-	/**
-	 * The file type request.
-	 */
-	private final int type;
+	@Override
+	protected void encode(ChannelHandlerContext ctx, XOREncryptionResponse msg, ByteBuf out) throws Exception {
+		if (msg.getKey() != 0) {
+			for (int i = 0; i < out.writerIndex(); i++) {
+				out.setByte(i, out.getByte(i) ^ msg.getKey());
+			}
+		}
 
-	/**
-	 * The id of the file request.
-	 */
-	private final int id;
-
-	/**
-	 * The priority of the request.
-	 */
-	private final boolean priority;
-
-	/**
-	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The file type request.
-	 * @param id The file id request.
-	 * @param priority The priority of the request.
-	 */
-	public UpdateRequest(ChannelHandler handler, int type, int id, boolean priority) {
-		super(handler);
-		this.type = type;
-		this.id = id;
-		this.priority = priority;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public int getType() {
-		return type;
-	}
-
-	/**
-	 * Gets the id.
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the priority.
-	 * 
-	 * @return the priority
-	 */
-	public boolean isPriority() {
-		return priority;
+		ctx.pipeline().remove(this);
 	}
 
 }

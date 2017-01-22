@@ -22,72 +22,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.protocol.cache;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
-import io.netty.channel.ChannelHandler;
+import com.quavo.osrs.Constants;
+
+import net.openrs.cache.Cache;
+import net.openrs.cache.Container;
+import net.openrs.cache.FileStore;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateRequest extends NetworkMessage {
+public final class CacheManager {
 
 	/**
-	 * The file type request.
+	 * The stored {@link Cache} used for this manager.
 	 */
-	private final int type;
+	private static Cache cache;
 
 	/**
-	 * The id of the file request.
+	 * The {@link ChecksumTable} for this manager.
 	 */
-	private final int id;
+	private static ByteBuffer checksumTable;
 
 	/**
-	 * The priority of the request.
+	 * Loads and stores the cache.
 	 */
-	private final boolean priority;
-
-	/**
-	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The file type request.
-	 * @param id The file id request.
-	 * @param priority The priority of the request.
-	 */
-	public UpdateRequest(ChannelHandler handler, int type, int id, boolean priority) {
-		super(handler);
-		this.type = type;
-		this.id = id;
-		this.priority = priority;
+	public static void load() {
+		try {
+			cache = new Cache(FileStore.open(Constants.CACHE_PATH));
+			checksumTable = new Container(Container.COMPRESSION_NONE, cache.createChecksumTable().encode()).encode();
+			System.out.println("Loaded " + cache.getTypeCount() + " cache indices.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets the cache.
 	 * 
-	 * @return the type
+	 * @return the cache
 	 */
-	public int getType() {
-		return type;
+	public static Cache getCache() {
+		return cache;
 	}
 
 	/**
-	 * Gets the id.
+	 * Gets the checksumTable.
 	 * 
-	 * @return the id
+	 * @return the checksumTable
 	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the priority.
-	 * 
-	 * @return the priority
-	 */
-	public boolean isPriority() {
-		return priority;
+	public static ByteBuffer getChecksumTable() {
+		return checksumTable;
 	}
 
 }

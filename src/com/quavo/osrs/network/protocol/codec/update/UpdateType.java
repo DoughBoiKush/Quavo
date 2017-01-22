@@ -60,7 +60,7 @@ public enum UpdateType {
 	UpdateType(int id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * Gets and returns a update type wrapped in a {@link Optional}.
 	 * 
