@@ -22,41 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.protocol.codec.update;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
+import com.quavo.osrs.network.handler.outbound.UpdateResponse;
 
-import io.netty.channel.ChannelHandler;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
-
-	/**
-	 * The {@link ConnectionType} requested by a connected game client.
-	 */
-	private final ConnectionType type;
+public final class UpdateEncoder extends MessageToByteEncoder<UpdateResponse> {
 
 	/**
 	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
 	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
+	public UpdateEncoder() {
+		super(UpdateResponse.class);
 	}
 
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public ConnectionType getType() {
-		return type;
+	@Override
+	protected void encode(ChannelHandlerContext ctx, UpdateResponse msg, ByteBuf out) throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }

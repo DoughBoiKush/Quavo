@@ -25,8 +25,12 @@
 package com.quavo.osrs.network;
 
 import com.quavo.osrs.network.handler.NetworkMessage;
+import com.quavo.osrs.network.handler.NetworkMessageListener;
+import com.quavo.osrs.network.handler.NetworkMessageRepository;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
@@ -34,10 +38,39 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public final class NetworkMessageHandler extends SimpleChannelInboundHandler<NetworkMessage> {
 
+	/**
+	 * Constructs a new object.
+	 */
+	public NetworkMessageHandler() {
+		super(true);// auto release reference counts.
+	}
+
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, NetworkMessage msg) throws Exception {
-		// TODO Auto-generated method stub
+		NetworkMessageListener<NetworkMessage> listener = NetworkMessageRepository.getNetworkListener(msg);
+		listener.handleMessage(ctx, msg);
 
+		ChannelPipeline pipeline = ctx.pipeline();
+		ChannelHandler handler = msg.getHandler();
+
+		// remove from the channel.
+		if (pipeline.context(handler) != null) {
+			pipeline.remove(handler);
+		}
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		if (cause.getMessage().equals("An existing connection was forcibly closed by the remote host")) {
+			return;
+		}
+
+		cause.printStackTrace();
+	}
+
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		ctx.flush();
 	}
 
 }

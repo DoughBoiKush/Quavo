@@ -22,41 +22,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.protocol.codec.update;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
+import java.util.List;
+import java.util.Optional;
 
-import io.netty.channel.ChannelHandler;
+import com.quavo.osrs.network.handler.inbound.UpdateRequest;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public final class UpdateDecoder extends ByteToMessageDecoder {
 
-	/**
-	 * The {@link ConnectionType} requested by a connected game client.
-	 */
-	private final ConnectionType type;
-
-	/**
-	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
-	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public ConnectionType getType() {
-		return type;
+	@Override
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		if (!in.isReadable() || in.readableBytes() < 4) {
+			return;
+		}
+		
+		Optional<UpdateType> request = UpdateType.getType(in.readUnsignedByte());
+		if (request.isPresent()) {
+			UpdateType updateType = request.get();
+			switch (updateType) {
+			case LOW_PRIORITY_UPDATE:
+			case HIGH_PRIORITY_UPDATE:
+				int uid = in.readUnsignedMedium();
+				int type = (uid >> 16);
+				int file = (uid & 0xfff);
+				
+				out.add(new UpdateRequest(this, type, file, updateType == UpdateType.HIGH_PRIORITY_UPDATE));
+				break;
+			case XOR_ENCRYPTION_UPDATE:
+				int key = in.readUnsignedByte();
+				in.readUnsignedShort();
+				System.out.println(key);
+				break;
+			}
+		} else {
+			in.readUnsignedMedium();
+		}
 	}
 
 }

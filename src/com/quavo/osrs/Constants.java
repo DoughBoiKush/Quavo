@@ -28,6 +28,11 @@ package com.quavo.osrs;
  * @author _jordan <citellumrsps@gmail.com>
  */
 public final class Constants {
+	
+	/**
+     * The package presentation.
+     */
+    public static final String PRESENTATION = "com.quavo.osrs";
 
 	/**
 	 * The host address the server binds to.
@@ -38,5 +43,10 @@ public final class Constants {
 	 * The port the server binds to.
 	 */
 	public static final int HOST_PORT = 43594;
+
+	/**
+	 * The output folder directory. Used for server reflection.
+	 */
+	public static final String OUTPUT_DIRECTORY = "bin";
 
 }

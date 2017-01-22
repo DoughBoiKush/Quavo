@@ -22,41 +22,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.protocol.codec.connection;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
-
-import io.netty.channel.ChannelHandler;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public enum ConnectionType {
 
 	/**
-	 * The {@link ConnectionType} requested by a connected game client.
+	 * Represents the handshake connection.
 	 */
-	private final ConnectionType type;
+	HANDSHAKE_CONNECTION(15);
+
+	/**
+	 * The protocol id for each connection type.
+	 */
+	private final int id;
 
 	/**
 	 * Constructs a new object.
 	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
+	 * @param id The connection id value for each type.
 	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
+	ConnectionType(int id) {
+		this.id = id;
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets and returns a connection type wrapped in a {@link Optional}.
 	 * 
-	 * @return the type
+	 * @param id The id used for getting a connection type.
+	 * @return The connection type.
 	 */
-	public ConnectionType getType() {
-		return type;
+	public static Optional<ConnectionType> getType(int id) {
+		return Arrays.stream(ConnectionType.values()).filter(a -> a.id == id).findAny();
+	}
+
+	/**
+	 * Gets the id.
+	 * 
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 
 }

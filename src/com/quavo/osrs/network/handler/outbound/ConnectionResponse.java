@@ -24,9 +24,37 @@
  */
 package com.quavo.osrs.network.handler.outbound;
 
+import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
+
+import io.netty.channel.ChannelHandler;
+
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
 public final class ConnectionResponse {
+
+	/**
+	 * The {@link ConnectionType} requested by a connected game client.
+	 */
+	private final ConnectionType type;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param handler The {@link ChannelHandler} used for this request.
+	 * @param type The {@link ConnectionType}.
+	 */
+	public ConnectionResponse(ConnectionType type) {
+		this.type = type;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public ConnectionType getType() {
+		return type;
+	}
 
 }

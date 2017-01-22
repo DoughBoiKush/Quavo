@@ -22,41 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.handler.listener;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
+import com.quavo.osrs.network.handler.NetworkMessageListener;
+import com.quavo.osrs.network.handler.inbound.UpdateRequest;
 
-import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
 
-	/**
-	 * The {@link ConnectionType} requested by a connected game client.
-	 */
-	private final ConnectionType type;
-
-	/**
-	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
-	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public ConnectionType getType() {
-		return type;
+	@Override
+	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

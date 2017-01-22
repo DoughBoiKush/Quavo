@@ -22,41 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.handler.listener;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
+import com.quavo.Quavo;
+import com.quavo.osrs.network.handler.NetworkMessageListener;
+import com.quavo.osrs.network.handler.inbound.HandshakeRequest;
+import com.quavo.osrs.network.handler.outbound.HandshakeResponse;
+import com.quavo.osrs.network.protocol.ClientMessage;
 
-import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public final class HandshakeListener implements NetworkMessageListener<HandshakeRequest> {
 
-	/**
-	 * The {@link ConnectionType} requested by a connected game client.
-	 */
-	private final ConnectionType type;
-
-	/**
-	 * Constructs a new object.
-	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
-	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public ConnectionType getType() {
-		return type;
+	@Override
+	public void handleMessage(ChannelHandlerContext ctx, HandshakeRequest msg) {
+		ClientMessage message = ClientMessage.SUCCESSFUL_CONNECTION;
+		if (msg.getVersion() != Quavo.VERSION) {
+			message = ClientMessage.OUT_OF_DATE;
+		}
+		
+		ctx.writeAndFlush(new HandshakeResponse(message));
 	}
 
 }

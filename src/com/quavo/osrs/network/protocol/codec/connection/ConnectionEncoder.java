@@ -25,9 +25,12 @@
 package com.quavo.osrs.network.protocol.codec.connection;
 
 import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
+import com.quavo.osrs.network.protocol.codec.handshake.HandshakeDecoder;
+import com.quavo.osrs.network.protocol.codec.handshake.HandshakeEncoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
@@ -35,10 +38,25 @@ import io.netty.handler.codec.MessageToByteEncoder;
  */
 public final class ConnectionEncoder extends MessageToByteEncoder<ConnectionResponse> {
 
+	/**
+	 * Constructs a new object.
+	 */
+	public ConnectionEncoder() {
+		super(ConnectionResponse.class);
+	}
+
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ConnectionResponse msg, ByteBuf out) throws Exception {
-		// TODO Auto-generated method stub
-
+		ChannelPipeline pipeline = ctx.pipeline();
+		
+		switch (msg.getType()) {
+		case HANDSHAKE_CONNECTION:
+			pipeline.addAfter("decoder", "handshake.encoder", new HandshakeEncoder());
+            pipeline.replace("decoder", "handshake.decoder", new HandshakeDecoder());
+			break;
+		}
+		
+		pipeline.remove(this);
 	}
 
 }

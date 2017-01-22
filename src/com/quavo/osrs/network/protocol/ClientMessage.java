@@ -28,5 +28,43 @@ package com.quavo.osrs.network.protocol;
  * @author _jordan <citellumrsps@gmail.com>
  */
 public enum ClientMessage {
+	
+    /**
+     * Establishes successful client connection between the server and the client.
+     */
+    SUCCESSFUL_CONNECTION(0),
+
+    /**
+     * Establishes a successful request.
+     */
+    SUCCESSFUL(2),
+
+    /**
+     * Tells the requested client that it is currently out-of-date to the connected game server.
+     */
+    OUT_OF_DATE(6);
+
+    /**
+     * Represents the client id for each code.
+     */
+    private final int id;
+
+    /**
+     * Constructs a new object.
+     *
+     * @param id The id to use.
+     */
+    ClientMessage(int id) {
+        this.id = id;
+    }
+
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
 }

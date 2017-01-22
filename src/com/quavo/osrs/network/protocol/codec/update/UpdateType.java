@@ -22,41 +22,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.protocol.codec.update;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
-
-import io.netty.channel.ChannelHandler;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public enum UpdateType {
 
 	/**
-	 * The {@link ConnectionType} requested by a connected game client.
+	 * Low priority file request.
 	 */
-	private final ConnectionType type;
+	LOW_PRIORITY_UPDATE(0),
+
+	/**
+	 * High priority file request.
+	 */
+	HIGH_PRIORITY_UPDATE(1),
+
+	/**
+	 * Encryption update request.
+	 */
+	XOR_ENCRYPTION_UPDATE(4);
+
+	/**
+	 * The id for each update type.
+	 */
+	private final int id;
 
 	/**
 	 * Constructs a new object.
 	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
+	 * @param id The update type id.
 	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
+	UpdateType(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * Gets and returns a update type wrapped in a {@link Optional}.
+	 * 
+	 * @param id The id used for getting a update type.
+	 * @return The update type.
+	 */
+	public static Optional<UpdateType> getType(int id) {
+		return Arrays.stream(UpdateType.values()).filter(a -> a.id == id).findAny();
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets the id.
 	 * 
-	 * @return the type
+	 * @return the id
 	 */
-	public ConnectionType getType() {
-		return type;
+	public int getId() {
+		return id;
 	}
 
 }

@@ -26,6 +26,8 @@ package com.quavo.osrs.network.protocol.codec.connection;
 
 import java.util.List;
 
+import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -41,8 +43,7 @@ public final class ConnectionDecoder extends ByteToMessageDecoder {
 			return;
 		}
 
-		int id = in.readUnsignedByte();
-		System.out.println(id);
+		ConnectionType.getType(in.readUnsignedByte()).ifPresent(type -> out.add(new ConnectionRequest(this, type)));// id
 	}
 
 }

@@ -22,41 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.inbound;
+package com.quavo.osrs.network.handler.outbound;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
-
-import io.netty.channel.ChannelHandler;
+import com.quavo.osrs.network.protocol.ClientMessage;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public final class HandshakeResponse {
 
 	/**
-	 * The {@link ConnectionType} requested by a connected game client.
+	 * The {@link ClientMessage} to send to the client for the handshake.
 	 */
-	private final ConnectionType type;
+	private final ClientMessage message;
 
 	/**
 	 * Constructs a new object.
 	 * 
-	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
+	 * @param message The {@link ClientMessage}.
 	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
-		super(handler);
-		this.type = type;
+	public HandshakeResponse(ClientMessage message) {
+		this.message = message;
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets the message.
 	 * 
-	 * @return the type
+	 * @return the message
 	 */
-	public ConnectionType getType() {
-		return type;
+	public ClientMessage getMessage() {
+		return message;
 	}
 
 }

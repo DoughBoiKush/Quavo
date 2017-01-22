@@ -25,38 +25,37 @@
 package com.quavo.osrs.network.handler.inbound;
 
 import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
 
 import io.netty.channel.ChannelHandler;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public final class HandshakeRequest extends NetworkMessage {
 
 	/**
-	 * The {@link ConnectionType} requested by a connected game client.
+	 * The version of the client requesting handshake.
 	 */
-	private final ConnectionType type;
+	private final int version;
 
 	/**
 	 * Constructs a new object.
 	 * 
 	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
+	 * @param version The version.
 	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
+	public HandshakeRequest(ChannelHandler handler, int version) {
 		super(handler);
-		this.type = type;
+		this.version = version;
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets the version.
 	 * 
-	 * @return the type
+	 * @return the version
 	 */
-	public ConnectionType getType() {
-		return type;
+	public int getVersion() {
+		return version;
 	}
 
 }

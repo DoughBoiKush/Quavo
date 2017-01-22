@@ -24,13 +24,34 @@
  */
 package com.quavo.osrs.network.handler;
 
+import io.netty.channel.ChannelHandler;
+
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public interface NetworkMessage {
+public abstract class NetworkMessage {
 
 	/**
-	 * UNUSABLE INTERFACE
+	 * The {@link ChannelHandler} constructed with each use of this abstract class.
 	 */
+	private final ChannelHandler handler;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param handler The {@link ChannelHandler}.
+	 */
+	public NetworkMessage(ChannelHandler handler) {
+		this.handler = handler;
+	}
+
+	/**
+	 * Gets the handler.
+	 * 
+	 * @return the handler
+	 */
+	public ChannelHandler getHandler() {
+		return handler;
+	}
 
 }

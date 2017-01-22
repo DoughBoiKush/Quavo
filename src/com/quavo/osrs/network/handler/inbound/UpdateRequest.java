@@ -25,29 +25,42 @@
 package com.quavo.osrs.network.handler.inbound;
 
 import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.protocol.codec.connection.ConnectionType;
 
 import io.netty.channel.ChannelHandler;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionRequest extends NetworkMessage {
+public final class UpdateRequest extends NetworkMessage {
 
 	/**
-	 * The {@link ConnectionType} requested by a connected game client.
+	 * The type request.
 	 */
-	private final ConnectionType type;
+	private final int type;
+
+	/**
+	 * The file request.
+	 */
+	private final int file;
+
+	/**
+	 * The priority of the request.
+	 */
+	private final boolean priority;
 
 	/**
 	 * Constructs a new object.
 	 * 
 	 * @param handler The {@link ChannelHandler} used for this request.
-	 * @param type The {@link ConnectionType}.
+	 * @param type The type request.
+	 * @param file The file request.
+	 * @param priority The priority of the request.
 	 */
-	public ConnectionRequest(ChannelHandler handler, ConnectionType type) {
+	public UpdateRequest(ChannelHandler handler, int type, int file, boolean priority) {
 		super(handler);
 		this.type = type;
+		this.file = file;
+		this.priority = priority;
 	}
 
 	/**
@@ -55,8 +68,26 @@ public final class ConnectionRequest extends NetworkMessage {
 	 * 
 	 * @return the type
 	 */
-	public ConnectionType getType() {
+	public int getType() {
 		return type;
+	}
+
+	/**
+	 * Gets the file.
+	 * 
+	 * @return the file
+	 */
+	public int getFile() {
+		return file;
+	}
+
+	/**
+	 * Gets the priority.
+	 * 
+	 * @return the priority
+	 */
+	public boolean isPriority() {
+		return priority;
 	}
 
 }
