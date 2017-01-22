@@ -35,13 +35,13 @@ import net.openrs.cache.FileStore;
 
 /**
  * @author Kyle Friz
- * @since  Apr 16, 2016
+ * @since Apr 16, 2016
  */
 public class TablesEncryptor {
 
 	public static void main(String[] args) {
 		try (Cache cache = new Cache(FileStore.open(Constants.CACHE_PATH))) {
-			
+
 			for (int type = 0; type < cache.getTypeCount(); type++) {
 				ByteBuffer buf = cache.getStore().read(255, type);
 				if (buf != null && buf.limit() > 0) {
@@ -50,22 +50,22 @@ public class TablesEncryptor {
 					int[] keys = new int[4];
 					for (int i = 0; i < keys.length; i++) {
 						keys[i] = random.nextInt();
-						
+
 						writer.write(String.valueOf(keys[i]));
 						writer.newLine();
 					}
 					writer.flush();
 					writer.close();
-					
+
 					Container container = Container.decode(buf);
 					ByteBuffer buffer = container.encode(keys);
 					cache.getStore().write(255, type, buffer);
 				}
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

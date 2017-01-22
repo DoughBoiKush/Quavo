@@ -51,13 +51,13 @@ public class SpriteDumper {
 
 				Container container = cache.read(8, i);
 				Sprite sprite = Sprite.decode(container.getData());
-				
-        File dir = new File(Constants.SPRITE_PATH);
-        
-        if (!dir.exists()) {
-              dir.mkdir();
-        }
-				
+
+				File dir = new File(Constants.SPRITE_PATH);
+
+				if (!dir.exists()) {
+					dir.mkdir();
+				}
+
 				for (int frame = 0; frame < sprite.size(); frame++) {
 					File file = new File(Constants.SPRITE_PATH, i + "_" + frame + ".png");
 					BufferedImage image = sprite.getFrame(frame);
@@ -65,7 +65,7 @@ public class SpriteDumper {
 					ImageIO.write(image, "png", file);
 				}
 			}
-			
+
 			Container container = cache.read(10, cache.getFileId(10, "title.jpg"));
 			byte[] bytes = new byte[container.getData().remaining()];
 			container.getData().get(bytes);

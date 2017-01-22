@@ -63,8 +63,7 @@ public class VarPlayerTypeList implements TypeList<VarPlayerType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.VARPLAYER);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARPLAYER).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARPLAYER).getData(), entry.size());
 
 			varPlayers = new VarPlayerType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,12 +92,12 @@ public class VarPlayerTypeList implements TypeList<VarPlayerType> {
 
 	@Override
 	public void print() {
-	      File dir = new File(Constants.TYPE_PATH);
+		File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "varplayers.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(varPlayers).filter(Objects::nonNull).forEach((VarPlayerType t) -> {

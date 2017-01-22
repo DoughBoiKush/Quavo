@@ -93,11 +93,9 @@ public class TypePrinter {
 			String array = Arrays.toString((int[]) field.get(instance));
 			return "new int[] " + array.replace("[", "{ ").replace("]", " }");
 		} else if (type == int[][].class) {
-			return "new int[][] "
-					+ Arrays.deepToString((int[][]) field.get(instance)).replace('[', '{').replace(']', '}');
+			return "new int[][] " + Arrays.deepToString((int[][]) field.get(instance)).replace('[', '{').replace(']', '}');
 		} else if (type == short[][].class) {
-			return "new short[][] "
-					+ Arrays.deepToString((short[][]) field.get(instance)).replace('[', '{').replace(']', '}');
+			return "new short[][] " + Arrays.deepToString((short[][]) field.get(instance)).replace('[', '{').replace(']', '}');
 		} else if (type == byte[].class) {
 			String array = Arrays.toString((byte[]) field.get(instance));
 			return "new byte[] " + array.replace("[", "{ ").replace("]", " }");
@@ -105,14 +103,11 @@ public class TypePrinter {
 			String array = Arrays.toString((short[]) field.get(instance));
 			return "new short[] " + array.replace("[", "{ ").replace("]", " }");
 		} else if (type == double[].class) {
-			return "new double[] "
-					+ Arrays.toString((double[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
+			return "new double[] " + Arrays.toString((double[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
 		} else if (type == boolean[].class) {
-			return "new boolean[] "
-					+ Arrays.toString((boolean[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
+			return "new boolean[] " + Arrays.toString((boolean[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
 		} else if (type == float[].class) {
-			return "new float[] "
-					+ Arrays.toString((float[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
+			return "new float[] " + Arrays.toString((float[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
 		} else if (type == String[].class) {
 			String[] array = (String[]) field.get(instance);
 			if (array != null) {

@@ -63,8 +63,7 @@ public class UnderlayTypeList implements TypeList<UnderlayType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.UNDERLAY);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.UNDERLAY).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.UNDERLAY).getData(), entry.size());
 
 			lays = new UnderlayType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,12 +92,12 @@ public class UnderlayTypeList implements TypeList<UnderlayType> {
 
 	@Override
 	public void print() {
-	      File dir = new File(Constants.TYPE_PATH);
+		File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "underlays.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(lays).filter(Objects::nonNull).forEach((UnderlayType t) -> {

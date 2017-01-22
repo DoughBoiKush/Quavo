@@ -72,7 +72,7 @@ public class InvType implements Type {
 		buffer.put((byte) 0);
 		return (ByteBuffer) buffer.flip();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

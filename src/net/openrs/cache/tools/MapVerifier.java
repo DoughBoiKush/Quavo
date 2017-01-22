@@ -49,8 +49,7 @@ public class MapVerifier {
 						cache.read(5, land, keys).getData();
 					} catch (Exception e) {
 						if (keys[0] != 0) {
-							System.out.println("Region ID: " + i + ", Coords: (" + ((i >> 8) << 6) + ", "
-									+ ((i & 0xFF) << 6) + "), File: (5, " + land + "), Keys: " + Arrays.toString(keys));
+							System.out.println("Region ID: " + i + ", Coords: (" + ((i >> 8) << 6) + ", " + ((i & 0xFF) << 6) + "), File: (5, " + land + "), Keys: " + Arrays.toString(keys));
 							count++;
 
 							try {

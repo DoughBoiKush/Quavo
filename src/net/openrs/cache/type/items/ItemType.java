@@ -76,7 +76,7 @@ public class ItemType implements Type {
 	private int yOffset2d = 0;
 	private int zan2d = 0;
 	private int zoom2d = 2000;
-	
+
 	private int anInt1879;
 	private int anInt1833;
 
@@ -222,7 +222,7 @@ public class ItemType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
 		return (ByteBuffer) buffer.flip();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

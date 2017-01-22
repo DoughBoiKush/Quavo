@@ -63,8 +63,7 @@ public class VarBitTypeList implements TypeList<VarBitType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.VARBIT);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARBIT).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARBIT).getData(), entry.size());
 
 			varBits = new VarBitType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,12 +92,12 @@ public class VarBitTypeList implements TypeList<VarBitType> {
 
 	@Override
 	public void print() {
-	      File dir = new File(Constants.TYPE_PATH);
+		File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "varbits.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(varBits).filter(Objects::nonNull).forEach((VarBitType t) -> {

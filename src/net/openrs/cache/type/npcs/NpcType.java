@@ -197,7 +197,7 @@ public class NpcType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
 		return (ByteBuffer) buffer.flip();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -206,7 +206,7 @@ public class NpcType implements Type {
 	@Override
 	public ByteBuffer encode317() {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
-		
+
 		if (models != null) {
 			buffer.put((byte) 1);
 			buffer.put((byte) models.length);
@@ -240,8 +240,7 @@ public class NpcType implements Type {
 			buffer.put((byte) 16);
 			buffer.putShort((short) anInt2189);
 		}
-		if (walkAnimation != -1 || rotate180Animation != -1 || rotate90RightAnimation != -1
-				|| rotate90LeftAnimation != -1) {
+		if (walkAnimation != -1 || rotate180Animation != -1 || rotate90RightAnimation != -1 || rotate90LeftAnimation != -1) {
 			buffer.put((byte) 17);
 			buffer.putShort((short) walkAnimation);
 			buffer.putShort((short) rotate180Animation);
@@ -349,7 +348,7 @@ public class NpcType implements Type {
 		}
 
 		buffer.put((byte) 0);
-		
+
 		return (ByteBuffer) buffer.flip();
 	}
 

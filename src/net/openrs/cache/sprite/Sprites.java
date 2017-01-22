@@ -34,51 +34,45 @@ import net.openrs.util.crypto.Djb2;
 public class Sprites {
 
 	private static Logger logger = Logger.getLogger(Sprites.class.getName());
-	
+
 	private static Sprite[] sprites;
 	private static final Map<Integer, Integer> hashes = new HashMap<>();
-	
-	public static void initialize(Cache cache)
-	{
+
+	public static void initialize(Cache cache) {
 		int count = 0;
-		try
-		{
+		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.SPRITES));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			sprites = new Sprite[table.capacity()];
-			
-			for (int i = 0; i < table.capacity(); i++)
-			{
+
+			for (int i = 0; i < table.capacity(); i++) {
 				Entry e = table.getEntry(i);
 				if (e == null)
 					continue;
-				
+
 				Container c = cache.read(CacheIndex.SPRITES, i);
 				Sprite sprite = Sprite.decode(c.getData());
 				sprites[i] = sprite;
 				hashes.put(e.getIdentifier(), i);
-				
+
 				count++;
 			}
-			
+
 		}
-		
-		catch (Exception e)
-		{
+
+		catch (Exception e) {
 			logger.log(Level.SEVERE, "Error Loading Sprite(s)!", e);
 		}
 		logger.info("Loaded " + count + " Sprite(s)!");
 	}
-	
-	public static final Sprite getSprite(int id)
-	{
+
+	public static final Sprite getSprite(int id) {
 		return sprites[id];
 	}
-	
-	public static final Sprite getSprite(String name)
-	{
+
+	public static final Sprite getSprite(String name) {
 		return sprites[hashes.get(Djb2.hash(name))];
 	}
-	
+
 }

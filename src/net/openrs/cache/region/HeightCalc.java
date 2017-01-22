@@ -44,9 +44,7 @@ public class HeightCalc {
 	static final int calculate(int baseX, int baseY, int x, int y) {
 		int xc = (baseX >> 3) + 932638 + x;
 		int yc = (baseY >> 3) + 556190 + y;
-		int n = interpolateNoise(xc + '\ub135', yc + 91923, 4) - 128
-				+ (interpolateNoise(10294 + xc, yc + '\u93bd', 2) - 128 >> 1)
-				+ (interpolateNoise(xc, yc, 1) - 128 >> 2);
+		int n = interpolateNoise(xc + '\ub135', yc + 91923, 4) - 128 + (interpolateNoise(10294 + xc, yc + '\u93bd', 2) - 128 >> 1) + (interpolateNoise(xc, yc, 1) - 128 >> 2);
 		n = 35 + (int) ((double) n * 0.3D);
 		if (n >= 10) {
 			if (n > 60) {

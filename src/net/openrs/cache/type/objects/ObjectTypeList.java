@@ -65,8 +65,7 @@ public class ObjectTypeList implements TypeList<ObjectType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.OBJECT);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.OBJECT).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.OBJECT).getData(), entry.size());
 
 			objs = new ObjectType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -95,13 +94,13 @@ public class ObjectTypeList implements TypeList<ObjectType> {
 
 	@Override
 	public void print() {
-	      
-	      File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		File dir = new File(Constants.TYPE_PATH);
+
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "objects.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(objs).filter(Objects::nonNull).forEach((ObjectType t) -> {

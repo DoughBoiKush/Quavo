@@ -63,8 +63,7 @@ public class EnumTypeList implements TypeList<EnumType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.ENUM);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.ENUM).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.ENUM).getData(), entry.size());
 
 			enums = new EnumType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,13 +92,13 @@ public class EnumTypeList implements TypeList<EnumType> {
 
 	@Override
 	public void print() {
-	      
-	  File dir = new File(Constants.TYPE_PATH);
 
-	  if (!dir.exists()) {
-	        dir.mkdir();
-	  }
-	      
+		File dir = new File(Constants.TYPE_PATH);
+
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "enums.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(enums).filter(Objects::nonNull).forEach((EnumType t) -> {

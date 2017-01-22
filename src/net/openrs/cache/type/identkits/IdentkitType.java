@@ -103,7 +103,7 @@ public class IdentkitType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
 		return (ByteBuffer) buffer.flip();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

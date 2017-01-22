@@ -41,7 +41,7 @@ public class MapDumper {
 
 	public static void main(String[] args) throws IOException {
 		try (Cache cache = new Cache(FileStore.open(Constants.CACHE_PATH))) {
-			for (int i = 0; i < 32768; i++) {			
+			for (int i = 0; i < 32768; i++) {
 				int[] keys = XTEAManager.lookupMap(i);
 
 				int x = (i >> 8);
@@ -54,12 +54,12 @@ public class MapDumper {
 					Container container = cache.read(5, map);
 					byte[] bytes = new byte[container.getData().limit()];
 					container.getData().get(bytes);
-					
-	         File dir = new File(Constants.MAP_PATH);
-	          
-	          if (!dir.exists()) {
-	                dir.mkdir();
-	          }
+
+					File dir = new File(Constants.MAP_PATH);
+
+					if (!dir.exists()) {
+						dir.mkdir();
+					}
 
 					File file = new File(Constants.MAP_PATH, "m" + x + "_" + y + ".dat");
 

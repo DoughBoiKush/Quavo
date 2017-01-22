@@ -23,7 +23,7 @@ package net.openrs.cache.region;
 
 /**
  * @author Kyle Friz
- * @since  Apr 2, 2016
+ * @since Apr 2, 2016
  */
 public class Location {
 
@@ -31,7 +31,7 @@ public class Location {
 	private final int type;
 	private final int orientation;
 	private final Position position;
-	
+
 	public Location(int id, int type, int ori, Position pos) {
 		this.id = id;
 		this.type = type;
@@ -66,5 +66,5 @@ public class Location {
 	public final Position getPosition() {
 		return position;
 	}
-	
+
 }

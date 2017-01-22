@@ -40,22 +40,19 @@ import net.openrs.util.ByteBufferUtils;
 public final class Sprite {
 
 	/**
-	 * This flag indicates that the pixels should be read vertically instead of
-	 * horizontally.
+	 * This flag indicates that the pixels should be read vertically instead of horizontally.
 	 */
 	public static final int FLAG_VERTICAL = 0x01;
 
 	/**
-	 * This flag indicates that every pixel has an alpha, as well as red, green
-	 * and blue, component.
+	 * This flag indicates that every pixel has an alpha, as well as red, green and blue, component.
 	 */
 	public static final int FLAG_ALPHA = 0x02;
 
 	/**
 	 * Decodes the {@link Sprite} from the specified {@link ByteBuffer}.
 	 * 
-	 * @param buffer
-	 *            The buffer.
+	 * @param buffer The buffer.
 	 * @return The sprite.
 	 */
 	public static Sprite decode(ByteBuffer buffer) {
@@ -115,8 +112,7 @@ public final class Sprite {
 			int[][] indices = new int[subWidth][subHeight];
 
 			/*
-			 * read the flags so we know whether to read horizontally or
-			 * vertically
+			 * read the flags so we know whether to read horizontally or vertically
 			 */
 			int flags = buffer.get() & 0xFF;
 
@@ -191,10 +187,8 @@ public final class Sprite {
 	/**
 	 * Creates a new sprite with one frame.
 	 * 
-	 * @param width
-	 *            The width of the sprite in pixels.
-	 * @param height
-	 *            The height of the sprite in pixels.
+	 * @param width The width of the sprite in pixels.
+	 * @param height The height of the sprite in pixels.
 	 */
 	public Sprite(int width, int height) {
 		this(width, height, 1);
@@ -203,12 +197,9 @@ public final class Sprite {
 	/**
 	 * Creates a new sprite with the specified number of frames.
 	 * 
-	 * @param width
-	 *            The width of the sprite in pixels.
-	 * @param height
-	 *            The height of the sprite in pixels.
-	 * @param size
-	 *            The number of animation frames.
+	 * @param width The width of the sprite in pixels.
+	 * @param height The height of the sprite in pixels.
+	 * @param size The number of animation frames.
 	 */
 	public Sprite(int width, int height, int size) {
 		if (size < 1)
@@ -222,13 +213,11 @@ public final class Sprite {
 	/**
 	 * Encodes this {@link Sprite} into a {@link ByteBuffer}.
 	 * <p />
-	 * Please note that this is a fairly simple implementation which only
-	 * supports vertical encoding. It does not attempt to use the offsets to
-	 * save space.
+	 * Please note that this is a fairly simple implementation which only supports vertical encoding. It does not
+	 * attempt to use the offsets to save space.
 	 * 
 	 * @return The buffer.
-	 * @throws IOException
-	 *             if an I/O exception occurs.
+	 * @throws IOException if an I/O exception occurs.
 	 */
 	public ByteBuffer encode() throws IOException {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -261,8 +250,7 @@ public final class Sprite {
 							flags |= FLAG_ALPHA;
 
 						/*
-						 * add the colour to the palette if it isn't already in
-						 * the palette
+						 * add the colour to the palette if it isn't already in the palette
 						 */
 						if (!palette.contains(rgb)) {
 							if (palette.size() >= 256)
@@ -337,8 +325,7 @@ public final class Sprite {
 	/**
 	 * Gets the frame with the specified id.
 	 * 
-	 * @param id
-	 *            The id.
+	 * @param id The id.
 	 * @return The frame.
 	 */
 	public BufferedImage getFrame(int id) {
@@ -366,10 +353,8 @@ public final class Sprite {
 	/**
 	 * Sets the frame with the specified id.
 	 * 
-	 * @param id
-	 *            The id.
-	 * @param frame
-	 *            The frame.
+	 * @param id The id.
+	 * @param frame The frame.
 	 */
 	public void setFrame(int id, BufferedImage frame) {
 		if (frame.getWidth() != width || frame.getHeight() != height)

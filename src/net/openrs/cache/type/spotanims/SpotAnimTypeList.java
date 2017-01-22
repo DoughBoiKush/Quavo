@@ -65,8 +65,7 @@ public class SpotAnimTypeList implements TypeList<SpotAnimType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.SPOTANIM);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.SPOTANIM).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.SPOTANIM).getData(), entry.size());
 
 			spots = new SpotAnimType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -95,13 +94,13 @@ public class SpotAnimTypeList implements TypeList<SpotAnimType> {
 
 	@Override
 	public void print() {
-	      
-	      File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		File dir = new File(Constants.TYPE_PATH);
+
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "spotanims.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(spots).filter(Objects::nonNull).forEach((SpotAnimType t) -> {

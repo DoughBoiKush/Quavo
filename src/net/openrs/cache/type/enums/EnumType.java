@@ -98,7 +98,7 @@ public class EnumType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
 		return (ByteBuffer) buffer.flip();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -128,8 +128,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param intVals
-	 *            the intVals to set
+	 * @param intVals the intVals to set
 	 */
 	public void setIntVals(int[] intVals) {
 		this.intVals = intVals;
@@ -143,8 +142,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param keyType
-	 *            the keyType to set
+	 * @param keyType the keyType to set
 	 */
 	public void setKeyType(char keyType) {
 		this.keyType = keyType;
@@ -158,8 +156,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param valType
-	 *            the valType to set
+	 * @param valType the valType to set
 	 */
 	public void setValType(char valType) {
 		this.valType = valType;
@@ -173,8 +170,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param defaultString
-	 *            the defaultString to set
+	 * @param defaultString the defaultString to set
 	 */
 	public void setDefaultString(String defaultString) {
 		this.defaultString = defaultString;
@@ -188,8 +184,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param defaultInt
-	 *            the defaultInt to set
+	 * @param defaultInt the defaultInt to set
 	 */
 	public void setDefaultInt(int defaultInt) {
 		this.defaultInt = defaultInt;
@@ -203,8 +198,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param size
-	 *            the size to set
+	 * @param size the size to set
 	 */
 	public void setSize(int size) {
 		this.size = size;
@@ -218,8 +212,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param keys
-	 *            the keys to set
+	 * @param keys the keys to set
 	 */
 	public void setKeys(int[] keys) {
 		this.keys = keys;
@@ -233,8 +226,7 @@ public class EnumType implements Type {
 	}
 
 	/**
-	 * @param stringVals
-	 *            the stringVals to set
+	 * @param stringVals the stringVals to set
 	 */
 	public void setStringVals(String[] stringVals) {
 		this.stringVals = stringVals;

@@ -30,7 +30,7 @@ import net.openrs.util.ByteBufferUtils;
 /**
  * 
  * @author Kyle Friz
- * @since  Jun 30, 2015
+ * @since Jun 30, 2015
  */
 public class Region {
 
@@ -44,7 +44,7 @@ public class Region {
 	private final byte[][][] overlayPaths = new byte[4][104][104];
 	private final byte[][][] overlayRotations = new byte[4][104][104];
 	private final byte[][][] underlayIds = new byte[4][104][104];
-	
+
 	private final List<Location> locations = new ArrayList<>();
 
 	public Region(int id) {
@@ -56,8 +56,7 @@ public class Region {
 	/**
 	 * Decodes terrain data stored in the specified {@link ByteBuffer}.
 	 *
-	 * @param buffer
-	 *            The ByteBuffer.
+	 * @param buffer The ByteBuffer.
 	 */
 	public void loadTerrain(ByteBuffer buf) {
 		for (int z = 0; z < 4; z++) {
@@ -67,7 +66,7 @@ public class Region {
 						int attribute = buf.get() & 0xFF;
 						if (attribute == 0) {
 							if (z == 0) {
-								//TODO Verify the height calculation was correctly ripped from client
+								// TODO Verify the height calculation was correctly ripped from client
 								tileHeights[0][x][y] = HeightCalc.calculate(baseX, baseY, x, y) << 3;
 							} else
 								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - 240;
@@ -102,8 +101,7 @@ public class Region {
 	/**
 	 * Decodes location data stored in the specified {@link ByteBuffer}.
 	 *
-	 * @param buffer
-	 *            The ByteBuffer.
+	 * @param buffer The ByteBuffer.
 	 */
 	public void loadLocations(ByteBuffer buf) {
 		int id = -1;
@@ -130,7 +128,7 @@ public class Region {
 			}
 		}
 	}
-	
+
 	/**
 	 * @return the regionID
 	 */
@@ -193,21 +191,19 @@ public class Region {
 	public final int getUnderlayId(final int z, final int x, final int y) {
 		return underlayIds[z][x][y] & 0xFF;
 	}
-	
+
 	/**
 	 * @return the locations
 	 */
 	public final List<Location> getLocations() {
 		return locations;
 	}
-	
-	public final String getLocationsIdentifier()
-	{
+
+	public final String getLocationsIdentifier() {
 		return "l" + (regionID >> 8) + "_" + (regionID & 0xFF);
 	}
-	
-	public final String getTerrainIdentifier()
-	{
+
+	public final String getTerrainIdentifier() {
 		return "m" + (regionID >> 8) + "_" + (regionID & 0xFF);
 	}
 }

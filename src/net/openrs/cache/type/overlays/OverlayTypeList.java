@@ -63,8 +63,7 @@ public class OverlayTypeList implements TypeList<OverlayType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.OVERLAY);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.OVERLAY).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.OVERLAY).getData(), entry.size());
 
 			lays = new OverlayType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,13 +92,13 @@ public class OverlayTypeList implements TypeList<OverlayType> {
 
 	@Override
 	public void print() {
-	      
-	      File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		File dir = new File(Constants.TYPE_PATH);
+
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "overlays.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(lays).filter(Objects::nonNull).forEach((OverlayType t) -> {

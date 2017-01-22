@@ -68,8 +68,7 @@ public class ItemTypeList implements TypeList<ItemType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.ITEM);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.ITEM).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.ITEM).getData(), entry.size());
 
 			items = new ItemType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -103,13 +102,13 @@ public class ItemTypeList implements TypeList<ItemType> {
 
 	@Override
 	public void print() {
-	      
-	      File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		File dir = new File(Constants.TYPE_PATH);
+
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "items.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(items).filter(Objects::nonNull).forEach((ItemType t) -> {

@@ -63,8 +63,7 @@ public class VarClientTypeList implements TypeList<VarClientType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.VARCLIENT);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARCLIENT).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARCLIENT).getData(), entry.size());
 
 			varClients = new VarClientType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,13 +92,13 @@ public class VarClientTypeList implements TypeList<VarClientType> {
 
 	@Override
 	public void print() {
-	      
-	      File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		File dir = new File(Constants.TYPE_PATH);
+
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "varclients.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(varClients).filter(Objects::nonNull).forEach((VarClientType t) -> {

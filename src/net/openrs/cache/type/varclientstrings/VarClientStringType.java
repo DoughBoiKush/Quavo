@@ -83,7 +83,7 @@ public class VarClientStringType implements Type {
 		buffer.put((byte) 0);
 		return (ByteBuffer) buffer.flip();
 	}
-	
+
 	public int getID() {
 		return id;
 	}

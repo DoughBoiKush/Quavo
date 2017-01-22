@@ -33,8 +33,7 @@ import org.apache.tools.bzip2.CBZip2InputStream;
 import org.apache.tools.bzip2.CBZip2OutputStream;
 
 /**
- * A class that contains methods to compress and uncompress BZIP2 and GZIP byte
- * arrays.
+ * A class that contains methods to compress and uncompress BZIP2 and GZIP byte arrays.
  * 
  * @author Graham
  * @author `Discardedx2
@@ -44,11 +43,9 @@ public final class CompressionUtils {
 	/**
 	 * Uncompresses a BZIP2 file.
 	 * 
-	 * @param bytes
-	 *            The compressed bytes without the header.
+	 * @param bytes The compressed bytes without the header.
 	 * @return The uncompressed bytes.
-	 * @throws IOException
-	 *             if an I/O error occurs.
+	 * @throws IOException if an I/O error occurs.
 	 */
 	public static byte[] bunzip2(byte[] bytes) throws IOException {
 		/* prepare a new byte array with the bzip2 header at the start */
@@ -79,11 +76,9 @@ public final class CompressionUtils {
 	/**
 	 * Compresses a BZIP2 file.
 	 * 
-	 * @param bytes
-	 *            The uncompressed bytes.
+	 * @param bytes The uncompressed bytes.
 	 * @return The compressed bytes without the header.
-	 * @throws IOException
-	 *             if an I/O erorr occurs.
+	 * @throws IOException if an I/O erorr occurs.
 	 */
 	public static byte[] bzip2(byte[] bytes) throws IOException {
 		InputStream is = new ByteArrayInputStream(bytes);
@@ -113,11 +108,9 @@ public final class CompressionUtils {
 	/**
 	 * Uncompresses a GZIP file.
 	 * 
-	 * @param bytes
-	 *            The compressed bytes.
+	 * @param bytes The compressed bytes.
 	 * @return The uncompressed bytes.
-	 * @throws IOException
-	 *             if an I/O error occurs.
+	 * @throws IOException if an I/O error occurs.
 	 */
 	public static byte[] gunzip(byte[] bytes) throws IOException {
 		/* create the streams */
@@ -145,11 +138,9 @@ public final class CompressionUtils {
 	/**
 	 * Compresses a GZIP file.
 	 * 
-	 * @param bytes
-	 *            The uncompressed bytes.
+	 * @param bytes The uncompressed bytes.
 	 * @return The compressed bytes.
-	 * @throws IOException
-	 *             if an I/O error occurs.
+	 * @throws IOException if an I/O error occurs.
 	 */
 	public static byte[] gzip(byte[] bytes) throws IOException {
 		/* create the streams */

@@ -63,8 +63,7 @@ public class VarClientStringTypeList implements TypeList<VarClientStringType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.VARCLIENTSTRING);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARCLIENTSTRING).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARCLIENTSTRING).getData(), entry.size());
 
 			varClients = new VarClientStringType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,12 +92,12 @@ public class VarClientStringTypeList implements TypeList<VarClientStringType> {
 
 	@Override
 	public void print() {
-	      File dir = new File(Constants.TYPE_PATH);
+		File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "varclientstrings.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(varClients).filter(Objects::nonNull).forEach((VarClientStringType t) -> {

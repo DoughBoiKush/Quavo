@@ -63,8 +63,7 @@ public class SequenceTypeList implements TypeList<SequenceType> {
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
 			Entry entry = table.getEntry(ConfigArchive.SEQUENCE);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.SEQUENCE).getData(),
-					entry.size());
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.SEQUENCE).getData(), entry.size());
 
 			seqs = new SequenceType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
@@ -93,12 +92,12 @@ public class SequenceTypeList implements TypeList<SequenceType> {
 
 	@Override
 	public void print() {
-	      File dir = new File(Constants.TYPE_PATH);
+		File dir = new File(Constants.TYPE_PATH);
 
-	      if (!dir.exists()) {
-	            dir.mkdir();
-	      }
-	      
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+
 		File file = new File(Constants.TYPE_PATH, "sequences.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			Arrays.stream(seqs).filter(Objects::nonNull).forEach((SequenceType t) -> {
