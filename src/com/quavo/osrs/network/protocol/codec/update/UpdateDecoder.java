@@ -53,7 +53,7 @@ public final class UpdateDecoder extends ByteToMessageDecoder {
 			case HIGH_PRIORITY_UPDATE:
 				int uid = in.readUnsignedMedium();
 				int type = (uid >> 16);
-				int id = (uid & 0xfff);
+				int id = (uid & 0xffff);
 
 				out.add(new UpdateRequest(this, type, id, updateType == UpdateType.HIGH_PRIORITY_UPDATE));
 				break;

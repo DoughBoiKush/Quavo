@@ -12,6 +12,7 @@ Desktop.ini
 *.gitattributes
 *.gitignore
 *repo/
+*src/com/quavo/utilities/tools/
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
