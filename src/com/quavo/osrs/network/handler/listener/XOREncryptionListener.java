@@ -37,7 +37,7 @@ public final class XOREncryptionListener implements NetworkMessageListener<XOREn
 
 	@Override
 	public void handleMessage(ChannelHandlerContext ctx, XOREncryptionRequest msg) {
-		ctx.writeAndFlush(new XOREncryptionResponse(msg.getKey()));
+		ctx.write(new XOREncryptionResponse(msg.getKey()));
 	}
 
 }

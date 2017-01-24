@@ -22,44 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.codec.login;
 
-import java.io.IOException;
+import java.util.List;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
+import com.quavo.osrs.network.handler.inbound.LoginRequest;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class LoginDecoder extends ByteToMessageDecoder {
 
 	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
-
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		if (!in.isReadable() || in.readableBytes() < 8) {
+			return;
 		}
-
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+		
+		LoginType.getType(in.readByte()).filter(a -> in.readShort() == in.readableBytes()).ifPresent(a -> out.add(new LoginRequest(this, a, in.readInt())));
 	}
 
 }

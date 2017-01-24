@@ -53,9 +53,10 @@ public final class NetworkMessageHandler extends SimpleChannelInboundHandler<Net
 		ChannelPipeline pipeline = ctx.pipeline();
 		ChannelHandler handler = msg.getHandler();
 
-		// remove from the channel.
 		if (pipeline.context(handler) != null) {
-			// pipeline.remove(handler);
+
+			// flush for specific handler.
+			pipeline.context(handler).flush();
 		}
 	}
 

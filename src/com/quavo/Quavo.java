@@ -48,7 +48,7 @@ public final class Quavo {
 		System.out.println("An open source OSRS emulation server aimed to be fast and informative.");
 
 		CacheManager.load();
-		System.out.println("Registered " + NetworkMessageRepository.getListeners().size() + " network listener(s).");
+		System.out.println("Registered " + NetworkMessageRepository.LISTENERS.size() + " network listener(s).");
 
 		// Start the network.
 		NetworkExecutor.start();

@@ -25,8 +25,11 @@
 package com.quavo.osrs.network.protocol.codec.connection;
 
 import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
+import com.quavo.osrs.network.protocol.ClientMessage;
 import com.quavo.osrs.network.protocol.codec.handshake.HandshakeDecoder;
 import com.quavo.osrs.network.protocol.codec.handshake.HandshakeEncoder;
+import com.quavo.osrs.network.protocol.codec.login.LoginDecoder;
+import com.quavo.osrs.network.protocol.codec.login.LoginEncoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -53,6 +56,11 @@ public final class ConnectionEncoder extends MessageToByteEncoder<ConnectionResp
 		case HANDSHAKE_CONNECTION:
 			pipeline.addAfter("decoder", "handshake.encoder", new HandshakeEncoder());
 			pipeline.replace("decoder", "handshake.decoder", new HandshakeDecoder());
+			break;
+		case LOGIN_CONNECTION:
+			out.writeByte(ClientMessage.SUCCESSFUL_CONNECTION.getId());
+			pipeline.addAfter("decoder", "login.encoder", new LoginEncoder());
+			pipeline.replace("decoder", "login.decoder", new LoginDecoder());
 			break;
 		}
 

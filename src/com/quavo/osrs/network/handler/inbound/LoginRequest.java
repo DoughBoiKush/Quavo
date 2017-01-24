@@ -22,44 +22,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.handler.inbound;
 
-import java.io.IOException;
+import com.quavo.osrs.network.handler.NetworkMessage;
+import com.quavo.osrs.network.protocol.codec.login.LoginType;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelHandler;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class LoginRequest extends NetworkMessage {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
+	/**
+	 * The {@link LoginType} for a login request.
+	 */
+	private final LoginType type;
 
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * The version of the client attempting to login.
+	 */
+	private final int version;
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param handler The {@link ChannelHandler} used for this request.
+	 * @param type The {@link LoginType}.
+	 * @param version The client version.
+	 */
+	public LoginRequest(ChannelHandler handler, LoginType type, int version) {
+		super(handler);
+		this.type = type;
+		this.version = version;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public LoginType getType() {
+		return type;
+	}
+
+	/**
+	 * Gets the version.
+	 * 
+	 * @return the version
+	 */
+	public int getVersion() {
+		return version;
 	}
 
 }

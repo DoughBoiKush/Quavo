@@ -33,6 +33,11 @@ import java.util.Optional;
 public enum ConnectionType {
 
 	/**
+	 * Represents the login connection.
+	 */
+	LOGIN_CONNECTION(14),
+
+	/**
 	 * Represents the handshake connection.
 	 */
 	HANDSHAKE_CONNECTION(15);

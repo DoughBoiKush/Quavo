@@ -24,42 +24,27 @@
  */
 package com.quavo.osrs.network.handler.listener;
 
-import java.io.IOException;
-
+import com.quavo.Quavo;
 import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
+import com.quavo.osrs.network.handler.inbound.LoginRequest;
+import com.quavo.osrs.network.handler.outbound.LoginResponse;
+import com.quavo.osrs.network.protocol.ClientMessage;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class LoginListener implements NetworkMessageListener<LoginRequest> {
 
 	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
-
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void handleMessage(ChannelHandlerContext ctx, LoginRequest msg) {
+		ClientMessage message = ClientMessage.SUCCESSFUL;
+		if (msg.getVersion() != Quavo.VERSION) {
+			message = ClientMessage.OUT_OF_DATE;
 		}
-
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+		
+		ctx.write(new LoginResponse(message, msg.getType()));
 	}
 
 }

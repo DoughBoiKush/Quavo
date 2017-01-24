@@ -38,7 +38,7 @@ public final class NetworkMessageRepository {
 	 * The {@link ImmutableMap} of {@link NetworkMessageListener}'s used to process protocol requests and
 	 * responses.
 	 */
-	private static final ImmutableMap<Class<?>, NetworkMessageListener<NetworkMessage>> LISTENERS = buildNetworkListeners();
+	public static final ImmutableMap<Class<?>, NetworkMessageListener<NetworkMessage>> LISTENERS = buildNetworkListeners();
 
 	/**
 	 * Builds the network listeners for this repository.
@@ -76,15 +76,6 @@ public final class NetworkMessageRepository {
 		Preconditions.checkArgument(LISTENERS.containsKey(message.getClass()), "Listener not found for the message request " + message.getClass().getSimpleName() + ".");
 
 		return LISTENERS.get(message.getClass());
-	}
-
-	/**
-	 * Gets the listeners.
-	 * 
-	 * @return the listeners
-	 */
-	public static ImmutableMap<Class<?>, NetworkMessageListener<NetworkMessage>> getListeners() {
-		return LISTENERS;
 	}
 
 }

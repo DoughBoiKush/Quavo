@@ -22,44 +22,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.codec.login;
 
-import java.io.IOException;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
+import com.quavo.osrs.network.handler.outbound.LoginResponse;
+import com.quavo.osrs.network.protocol.ClientMessage;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class LoginEncoder extends MessageToByteEncoder<LoginResponse> {
+
+	/**
+	 * Constructs a new object.
+	 */
+	public LoginEncoder() {
+		super(LoginResponse.class);
+	}
 
 	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
+	protected void encode(ChannelHandlerContext ctx, LoginResponse msg, ByteBuf out) throws Exception {
+		ClientMessage message = msg.getMessage();
 
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
+		if (message != ClientMessage.SUCCESSFUL) {
+			// dont write the id for successful.
+			out.writeByte(message.getId());
+		} else {
+			switch (msg.getType()) {
+			case NEW_CONNECTION_LOGIN:
+				break;
+			case RECONNECTION_LOGIN:
+				break;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+		ctx.pipeline().remove(this);
 	}
 
 }

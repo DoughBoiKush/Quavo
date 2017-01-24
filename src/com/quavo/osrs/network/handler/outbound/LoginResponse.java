@@ -22,44 +22,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.handler.outbound;
 
-import java.io.IOException;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.network.protocol.ClientMessage;
+import com.quavo.osrs.network.protocol.codec.login.LoginType;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class LoginResponse {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
+	/**
+	 * The {@link ClientMessage} to send back to the client.
+	 */
+	private final ClientMessage message;
 
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * The {@link LoginType} used for this response.
+	 */
+	private final LoginType type;
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param message The {@link ClientMessage} to send back to the client.
+	 * @param type The {@link LoginType}.
+	 */
+	public LoginResponse(ClientMessage message, LoginType type) {
+		this.message = message;
+		this.type = type;
+	}
+
+	/**
+	 * Gets the message.
+	 * 
+	 * @return the message
+	 */
+	public ClientMessage getMessage() {
+		return message;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public LoginType getType() {
+		return type;
 	}
 
 }

@@ -37,7 +37,7 @@ public final class ConnectionListener implements NetworkMessageListener<Connecti
 
 	@Override
 	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.writeAndFlush(new ConnectionResponse(msg.getType()));
+		ctx.write(new ConnectionResponse(msg.getType()));
 	}
 
 }
