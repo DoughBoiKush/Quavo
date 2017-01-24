@@ -1,6 +1,12 @@
 # Quavo
 An open source OSRS emulation server aimed to be fast and informative.
 
-# Project Technicalities
-- Built with Gradle.
-- A scratch, ground-up network using Netty 4.1.*.
+# Features
+- Quavo is a Java 8 server built with Gradle nature.
+- Features a ground-up network using Netty's "asynchronous event-driven network application framework" API.
+- OpenRS cache library written by @https://github.com/grahamedgecombe
+
+# Protocol
+- Connection.
+- Handshake.
+- Update Server.
