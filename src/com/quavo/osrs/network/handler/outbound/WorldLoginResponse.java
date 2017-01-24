@@ -22,44 +22,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.handler.outbound;
 
-import java.io.IOException;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.network.protocol.ClientMessage;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class WorldLoginResponse {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
+	/**
+	 * The {@link Player}.
+	 */
+	private final Player player;
 
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumBuffer());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * The {@link ClientMessage}.
+	 */
+	private final ClientMessage message;
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param message The {@link ClientMessage}.
+	 */
+	public WorldLoginResponse(ClientMessage message) {
+		this(null, message);
+	}
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param player The {@link Player}.
+	 * @param message The {@link ClientMessage}.
+	 */
+	public WorldLoginResponse(Player player, ClientMessage message) {
+		this.player = player;
+		this.message = message;
+	}
+
+	/**
+	 * Gets the player.
+	 * 
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Gets the message.
+	 * 
+	 * @return the message
+	 */
+	public ClientMessage getMessage() {
+		return message;
 	}
 
 }

@@ -22,44 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.game.node.actor.player.info;
 
-import java.io.IOException;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.model.inter.DisplayMode;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class DisplayInformation {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
+	/**
+	 * The display mode.
+	 */
+	private DisplayMode displayMode;
 
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumBuffer());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * Gets the displayMode.
+	 * 
+	 * @return the displayMode
+	 */
+	public DisplayMode getDisplayMode() {
+		return displayMode;
+	}
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+	/**
+	 * Sets the displayMode.
+	 * 
+	 * @param displayMode the displayMode to set
+	 */
+	public void setDisplayMode(DisplayMode displayMode) {
+		this.displayMode = displayMode;
 	}
 
 }

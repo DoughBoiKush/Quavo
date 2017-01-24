@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import com.quavo.osrs.Constants;
 
 import net.openrs.cache.Cache;
+import net.openrs.cache.ChecksumTable;
 import net.openrs.cache.Container;
 import net.openrs.cache.FileStore;
 
@@ -44,9 +45,14 @@ public final class CacheManager {
 	private static Cache cache;
 
 	/**
+	 * The {@link ByteBuffer} for the {@link ChecksumTable}.
+	 */
+	private static ByteBuffer checksumBuffer;
+
+	/**
 	 * The {@link ChecksumTable} for this manager.
 	 */
-	private static ByteBuffer checksumTable;
+	private static ChecksumTable checksumTable;
 
 	/**
 	 * Loads and stores the cache.
@@ -54,7 +60,8 @@ public final class CacheManager {
 	public static void load() {
 		try {
 			cache = new Cache(FileStore.open(Constants.CACHE_PATH));
-			checksumTable = new Container(Container.COMPRESSION_NONE, cache.createChecksumTable().encode()).encode();
+			checksumTable = cache.createChecksumTable();
+			checksumBuffer = new Container(Container.COMPRESSION_NONE, checksumTable.encode()).encode();
 			System.out.println("Loaded " + cache.getTypeCount() + " cache indices.");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -71,11 +78,20 @@ public final class CacheManager {
 	}
 
 	/**
+	 * Gets the checksumBuffer.
+	 * 
+	 * @return the checksumBuffer
+	 */
+	public static ByteBuffer getChecksumBuffer() {
+		return checksumBuffer;
+	}
+
+	/**
 	 * Gets the checksumTable.
 	 * 
 	 * @return the checksumTable
 	 */
-	public static ByteBuffer getChecksumTable() {
+	public static ChecksumTable getChecksumTable() {
 		return checksumTable;
 	}
 

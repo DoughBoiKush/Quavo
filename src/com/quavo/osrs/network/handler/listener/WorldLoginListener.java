@@ -24,42 +24,53 @@
  */
 package com.quavo.osrs.network.handler.listener;
 
-import java.io.IOException;
-
+import com.quavo.osrs.game.node.actor.player.Player;
 import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
+import com.quavo.osrs.network.handler.inbound.WorldLoginRequest;
+import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
+import com.quavo.osrs.network.protocol.ClientMessage;
 import com.quavo.osrs.network.protocol.cache.CacheManager;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class WorldLoginListener implements NetworkMessageListener<WorldLoginRequest> {
 
 	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
-
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumBuffer());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void handleMessage(ChannelHandlerContext ctx, WorldLoginRequest msg) {
+		ClientMessage message = isLoginAvailable(msg);
+		if (message != ClientMessage.SUCCESSFUL) {
+			ctx.write(new WorldLoginResponse(message));
+			return;
 		}
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+		Player player = new Player();
+		ctx.write(new WorldLoginResponse(player, message));
+	}
+
+	/**
+	 * Checks if the user is able to login into the game.
+	 * 
+	 * @param msg The {@link WorldLoginRequest}.
+	 * @return <true> if the user is able to login.
+	 */
+	private ClientMessage isLoginAvailable(WorldLoginRequest msg) {
+		ClientMessage message = ClientMessage.SUCCESSFUL;
+
+		if (!msg.getToken().equals("ElZAIrq5NpKN6D3mDdihco3oPeYN2KFy2DCquj7JMmECPmLrDP3Bnw")) {
+			message = ClientMessage.OUT_OF_DATE;
+		}
+
+		for (int index = 0; index < msg.getCRC().length; index++) {
+			if (CacheManager.getChecksumTable().getEntry(index).getCrc() != msg.getCRC()[index]) {
+				message = ClientMessage.OUT_OF_DATE;
+				break;
+			}
+		}
+
+		return message;
 	}
 
 }

@@ -42,7 +42,7 @@ public final class LoginDecoder extends ByteToMessageDecoder {
 		if (!in.isReadable() || in.readableBytes() < 8) {
 			return;
 		}
-		
+
 		LoginType.getType(in.readByte()).filter(a -> in.readShort() == in.readableBytes()).ifPresent(a -> out.add(new LoginRequest(this, a, in.readInt())));
 	}
 

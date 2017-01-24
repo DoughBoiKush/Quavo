@@ -27,7 +27,7 @@ package com.quavo.osrs.network.handler;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.quavo.osrs.Constants;
-import com.quavo.utilities.FileUtilities;
+import com.quavo.util.FileUtilities;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>

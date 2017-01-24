@@ -55,7 +55,7 @@ public enum LoginType {
 	LoginType(int id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * Gets and returns a connection type wrapped in a {@link Optional}.
 	 * 

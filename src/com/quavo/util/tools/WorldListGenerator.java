@@ -22,44 +22,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.util.tools;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public final class WorldListGenerator {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
-
+	/**
+	 * Runs the application.
+	 * 
+	 * @param args Runtime arguments.
+	 */
+	public static void main(String[] args) {
 		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumBuffer());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
+			/** SET HERE */
+			final int id = 301;
+			final int flag = 0x8;
+			final String domain = "127.0.0.1";
+			final String activity = "Home World";
+			final int location = 225;
+			final int population = 1;
+			/** END */
+
+			DataOutputStream output = new DataOutputStream(new FileOutputStream("./repo/slr.ws"));
+			output.writeInt(35);
+			output.writeShort(1);
+			output.writeShort(id);
+			output.writeInt(flag);
+			output.writeBytes(domain);
+			output.writeBytes(activity);
+			output.writeByte(location);
+			output.writeShort(population);
+			output.flush();
+			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
 	}
 
 }

@@ -22,44 +22,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.game.model.inter;
 
-import java.io.IOException;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.UpdateRequest;
-import com.quavo.osrs.network.handler.outbound.UpdateResponse;
-import com.quavo.osrs.network.protocol.cache.CacheManager;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class UpdateListener implements NetworkMessageListener<UpdateRequest> {
+public enum DisplayMode {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		int type = msg.getType();
-		int id = msg.getId();
-		ByteBuf container = null;
+	/**
+	 * Fixed screen display mode.
+	 */
+	FIXED_MODE,
 
-		try {
-			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumBuffer());
-			} else {
-				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
-				if (type != 0xff) {
-					container = container.slice(0, container.readableBytes() - 2);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * Resizable screen display mode.
+	 */
+	RESIZABLE_MODE;
 
-		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
+	/**
+	 * Gets and returns a connection type wrapped in a {@link Optional}.
+	 * 
+	 * @param id The id used for getting a display mode.
+	 * @return The display mode.
+	 */
+	public static Optional<DisplayMode> getDisplayMode(int id) {
+		return Arrays.stream(DisplayMode.values()).filter(a -> a.ordinal() == id).findAny();
+	}
+
+	/**
+	 * Checks if the display mode is currently in resizable mode.
+	 * 
+	 * @return <true> if the display is resizable.
+	 */
+	public boolean isResizableMode() {
+		return (this == DisplayMode.RESIZABLE_MODE);
 	}
 
 }

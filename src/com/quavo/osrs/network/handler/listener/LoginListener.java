@@ -43,7 +43,7 @@ public final class LoginListener implements NetworkMessageListener<LoginRequest>
 		if (msg.getVersion() != Quavo.VERSION) {
 			message = ClientMessage.OUT_OF_DATE;
 		}
-		
+
 		ctx.write(new LoginResponse(message, msg.getType()));
 	}
 

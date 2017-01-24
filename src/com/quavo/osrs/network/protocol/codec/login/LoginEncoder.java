@@ -26,9 +26,12 @@ package com.quavo.osrs.network.protocol.codec.login;
 
 import com.quavo.osrs.network.handler.outbound.LoginResponse;
 import com.quavo.osrs.network.protocol.ClientMessage;
+import com.quavo.osrs.network.protocol.codec.login.world.WorldLoginDecoder;
+import com.quavo.osrs.network.protocol.codec.login.world.WorldLoginEncoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
@@ -46,20 +49,17 @@ public final class LoginEncoder extends MessageToByteEncoder<LoginResponse> {
 	@Override
 	protected void encode(ChannelHandlerContext ctx, LoginResponse msg, ByteBuf out) throws Exception {
 		ClientMessage message = msg.getMessage();
+		ChannelPipeline pipeline = ctx.pipeline();
 
 		if (message != ClientMessage.SUCCESSFUL) {
 			// dont write the id for successful.
 			out.writeByte(message.getId());
 		} else {
-			switch (msg.getType()) {
-			case NEW_CONNECTION_LOGIN:
-				break;
-			case RECONNECTION_LOGIN:
-				break;
-			}
+			pipeline.addAfter("login.decoder", "world.encoder", new WorldLoginEncoder());
+			pipeline.replace("login.decoder", "world.decoder", new WorldLoginDecoder(msg.getType()));
 		}
 
-		ctx.pipeline().remove(this);
+		pipeline.remove(this);
 	}
 
 }
