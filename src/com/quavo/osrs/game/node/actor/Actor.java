@@ -24,9 +24,19 @@
  */
 package com.quavo.osrs.game.node.actor;
 
+import com.quavo.osrs.game.node.Node;
+import com.quavo.osrs.game.world.World;
+
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public class Actor {
+public abstract class Actor extends Node {
+
+	/**
+	 * Constructs a new object.
+	 */
+	public Actor() {
+		super(World.DEFAULT_POSITION);
+	}
 
 }

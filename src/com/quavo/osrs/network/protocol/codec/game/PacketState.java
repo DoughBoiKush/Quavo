@@ -22,45 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
-
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.MessageToByteEncoder;
+package com.quavo.osrs.network.protocol.codec.game;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
+public enum PacketState {
 
 	/**
-	 * Constructs a new object.
+	 * The packet id.
 	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
-	}
+	READ_ID,
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-		ChannelPipeline pipeline = ctx.pipeline();
+	/**
+	 * The packet size.
+	 */
+	READ_SIZE,
 
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeBoolean(false);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeBoolean(false);
-			out.writeShort(1);// index
-			out.writeByte(1);
-		}
-
-	}
-
+	/**
+	 * The buffer payload.
+	 */
+	READ_PAYLOAD
 }

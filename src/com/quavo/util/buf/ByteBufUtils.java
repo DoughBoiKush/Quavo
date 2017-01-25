@@ -124,5 +124,17 @@ public final class ByteBufUtils {
 		}
 		return bldr.toString();
 	}
+	
+    /**
+     * Writes a jag string into the buffer.
+     *
+     * @param out The buffer.
+     * @param str The string.
+     */
+    public static void writeJagString(ByteBuf out, String str) {
+        out.writeByte(0);
+        out.writeBytes(str.getBytes());
+        out.writeByte(ByteBufUtils.STRING_TERMINATOR);
+    }
 
 }

@@ -24,9 +24,76 @@
  */
 package com.quavo.osrs.game.node.actor.player;
 
+import com.quavo.osrs.game.node.actor.Actor;
+import com.quavo.osrs.game.world.region.Viewport;
+import com.quavo.osrs.network.handler.listener.GamePacketListener;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.StaticRegionContext;
+
+import io.netty.channel.Channel;
+
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class Player {
+public final class Player extends Actor {
+
+	/**
+	 * The {@link Channel}.
+	 */
+	private final Channel channel;
+
+	/**
+	 * The {@link Viewport}.
+	 */
+	private final Viewport viewport = new Viewport(this);
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param channel The channel.
+	 */
+	public Player(Channel channel) {
+		this.channel = channel;
+	}
+
+	/**
+	 * Initiates the player.
+	 */
+	public void init() {
+		sendPacket(new StaticRegionContext(true));
+		sendPacket(new GamePanelContext(548));
+	}
+
+	/**
+	 * Sends a packet.
+	 * 
+	 * @param context The {@link PacketContext}.
+	 */
+	public void sendPacket(PacketContext context) {
+		if (GamePacketListener.sendGamePacket(this, context)) {
+			if (channel.isRegistered()) {
+				channel.flush();
+			}
+		}
+	}
+
+	/**
+	 * Gets the viewport.
+	 * 
+	 * @return the viewport
+	 */
+	public Viewport getViewport() {
+		return viewport;
+	}
+
+	/**
+	 * Gets the channel.
+	 * 
+	 * @return the channel
+	 */
+	public Channel getChannel() {
+		return channel;
+	}
 
 }

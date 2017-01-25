@@ -22,45 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
+package com.quavo.osrs.network.protocol.packet.decode;
 
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.MessageToByteEncoder;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.network.protocol.packet.GamePacketReader;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
+public interface PacketDecoder {
 
 	/**
-	 * Constructs a new object.
+	 * Reads a packet.
+	 *
+	 * @param player The player.
+	 * @param packetId The packet id.
+	 * @param reader The packet buffer.
 	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
-	}
+	void readPacket(Player player, int packetId, GamePacketReader reader);
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-		ChannelPipeline pipeline = ctx.pipeline();
-
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeBoolean(false);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeBoolean(false);
-			out.writeShort(1);// index
-			out.writeByte(1);
-		}
-
-	}
+	/**
+	 * Gets available packet ids for each incoming packet.
+	 *
+	 * @return The packet ids.
+	 */
+	int[] packetIds();
 
 }

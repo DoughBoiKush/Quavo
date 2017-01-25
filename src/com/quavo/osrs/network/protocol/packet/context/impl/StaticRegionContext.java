@@ -22,45 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.MessageToByteEncoder;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
+public final class StaticRegionContext implements PacketContext {
+
+	/**
+	 * Checks if a full update is required.
+	 */
+	private final boolean fullUpdate;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param fullUpdate Checks if a full update is required.
 	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
+	public StaticRegionContext(boolean fullUpdate) {
+		this.fullUpdate = fullUpdate;
 	}
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-		ChannelPipeline pipeline = ctx.pipeline();
-
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeBoolean(false);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeBoolean(false);
-			out.writeShort(1);// index
-			out.writeByte(1);
-		}
-
+	/**
+	 * Gets the fullUpdate.
+	 * 
+	 * @return the fullUpdate
+	 */
+	public boolean isFullUpdate() {
+		return fullUpdate;
 	}
 
 }

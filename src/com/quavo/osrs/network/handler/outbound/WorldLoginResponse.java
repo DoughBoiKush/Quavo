@@ -26,6 +26,7 @@ package com.quavo.osrs.network.handler.outbound;
 
 import com.quavo.osrs.game.node.actor.player.Player;
 import com.quavo.osrs.network.protocol.ClientMessage;
+import com.quavo.util.IsaacRandomPair;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -43,12 +44,17 @@ public final class WorldLoginResponse {
 	private final ClientMessage message;
 
 	/**
+	 * The {@link IsaacRandomPair}.
+	 */
+	private final IsaacRandomPair isaacPair;
+
+	/**
 	 * Constructs a new object.
 	 * 
 	 * @param message The {@link ClientMessage}.
 	 */
 	public WorldLoginResponse(ClientMessage message) {
-		this(null, message);
+		this(null, message, null);
 	}
 
 	/**
@@ -56,10 +62,12 @@ public final class WorldLoginResponse {
 	 * 
 	 * @param player The {@link Player}.
 	 * @param message The {@link ClientMessage}.
+	 * @param isaacPair The {@link IsaacRandomPair}.
 	 */
-	public WorldLoginResponse(Player player, ClientMessage message) {
+	public WorldLoginResponse(Player player, ClientMessage message, IsaacRandomPair isaacPair) {
 		this.player = player;
 		this.message = message;
+		this.isaacPair = isaacPair;
 	}
 
 	/**
@@ -78,6 +86,15 @@ public final class WorldLoginResponse {
 	 */
 	public ClientMessage getMessage() {
 		return message;
+	}
+
+	/**
+	 * Gets the isaacPair.
+	 * 
+	 * @return the isaacPair
+	 */
+	public IsaacRandomPair getIsaacPair() {
+		return isaacPair;
 	}
 
 }

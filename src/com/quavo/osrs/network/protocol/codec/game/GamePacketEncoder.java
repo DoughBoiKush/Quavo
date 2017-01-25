@@ -22,45 +22,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
+package com.quavo.osrs.network.protocol.codec.game;
 
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
+import com.quavo.osrs.network.handler.outbound.GamePacketResponse;
+import com.quavo.osrs.network.protocol.packet.PacketType;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.MessageToByteEncoder;
+import net.burtleburtle.bob.rand.IsaacRandom;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
+public final class GamePacketEncoder extends MessageToByteEncoder<GamePacketResponse> {
+
+	/**
+	 * The {@link IsaacRandom} used for encoding packets.
+	 */
+	private final IsaacRandom encoder;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param encoder The {@link IsaacRandom} for encoding packets.
 	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
+	public GamePacketEncoder(IsaacRandom encoder) {
+		this.encoder = encoder;
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-		ChannelPipeline pipeline = ctx.pipeline();
-
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeBoolean(false);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeBoolean(false);
-			out.writeShort(1);// index
-			out.writeByte(1);
+	protected void encode(ChannelHandlerContext ctx, GamePacketResponse msg, ByteBuf out) throws Exception {
+		PacketEncoder<PacketContext> packet = msg.getPacket();
+		int id = packet.getId();
+		PacketType type = packet.getPacketType();
+		ByteBuf buffer = packet.getBuilder().getBuffer();
+		
+		out.writeByte(id/* + encoder.nextInt()*/);
+		if (type == PacketType.VARIABLE_BYTE) {
+			out.writeByte(buffer.writerIndex());
+		} else if (type == PacketType.VARIABLE_SHORT) {
+			out.writeShort(buffer.writerIndex());
 		}
-
+		out.writeBytes(buffer);
 	}
 
 }

@@ -30,6 +30,8 @@ import com.quavo.osrs.network.handler.inbound.WorldLoginRequest;
 import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
 import com.quavo.osrs.network.protocol.ClientMessage;
 import com.quavo.osrs.network.protocol.cache.CacheManager;
+import com.quavo.osrs.network.protocol.codec.game.GamePacketDecoder;
+import com.quavo.osrs.network.protocol.codec.game.GamePacketEncoder;
 
 import io.netty.channel.ChannelHandlerContext;
 
@@ -40,14 +42,26 @@ public final class WorldLoginListener implements NetworkMessageListener<WorldLog
 
 	@Override
 	public void handleMessage(ChannelHandlerContext ctx, WorldLoginRequest msg) {
-		ClientMessage message = isLoginAvailable(msg);
+		ClientMessage message = evaluateLogin(msg);
 		if (message != ClientMessage.SUCCESSFUL) {
 			ctx.write(new WorldLoginResponse(message));
 			return;
 		}
 
-		Player player = new Player();
-		ctx.write(new WorldLoginResponse(player, message));
+		Player player = new Player(ctx.channel());
+		ctx.write(new WorldLoginResponse(player, message, msg.getIsaacPair()));
+		
+
+		// this isnt set automatically.
+		ctx.pipeline().remove("login.encoder");
+		ctx.pipeline().remove("world.decoder");
+		ctx.pipeline().remove("world.encoder");
+		ctx.pipeline().addBefore("adapter", "game.encoder", new GamePacketEncoder(msg.getIsaacPair().getEncoderRandom()));
+		System.out.println("Channels: " + ctx.channel().pipeline().names());
+		
+		player.init();
+		ctx.pipeline().addBefore("adapter", "game.decoder", new GamePacketDecoder(msg.getIsaacPair().getDecoderRandom()));
+
 	}
 
 	/**
@@ -56,7 +70,7 @@ public final class WorldLoginListener implements NetworkMessageListener<WorldLog
 	 * @param msg The {@link WorldLoginRequest}.
 	 * @return <true> if the user is able to login.
 	 */
-	private ClientMessage isLoginAvailable(WorldLoginRequest msg) {
+	private ClientMessage evaluateLogin(WorldLoginRequest msg) {
 		ClientMessage message = ClientMessage.SUCCESSFUL;
 
 		if (!msg.getToken().equals("ElZAIrq5NpKN6D3mDdihco3oPeYN2KFy2DCquj7JMmECPmLrDP3Bnw")) {

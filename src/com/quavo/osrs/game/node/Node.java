@@ -24,9 +24,43 @@
  */
 package com.quavo.osrs.game.node;
 
+import com.quavo.osrs.game.world.region.Position;
+
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public class Node {
+public abstract class Node {
+
+	/**
+	 * The {@link Position}.
+	 */
+	protected Position position;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param position The position.
+	 */
+	public Node(Position position) {
+		this.position = position;
+	}
+
+	/**
+	 * Gets the position.
+	 * 
+	 * @return the position
+	 */
+	public Position getPosition() {
+		return position;
+	}
+
+	/**
+	 * Sets the position.
+	 * 
+	 * @param position the position to set
+	 */
+	public void setPosition(Position position) {
+		this.position = position;
+	}
 
 }

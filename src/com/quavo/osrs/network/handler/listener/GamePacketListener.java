@@ -22,45 +22,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
+package com.quavo.osrs.network.handler.listener;
 
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import io.netty.buffer.ByteBuf;
+import com.google.common.base.Preconditions;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.network.handler.NetworkMessageListener;
+import com.quavo.osrs.network.handler.inbound.GamePacketRequest;
+import com.quavo.osrs.network.handler.outbound.GamePacketResponse;
+import com.quavo.osrs.network.protocol.packet.PacketRepository;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
-
-	/**
-	 * Constructs a new object.
-	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
-	}
+public final class GamePacketListener implements NetworkMessageListener<GamePacketRequest> {
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-		ChannelPipeline pipeline = ctx.pipeline();
+	public void handleMessage(ChannelHandlerContext ctx, GamePacketRequest msg) {
+		System.out.println("INCOMING PACKET: " + msg.getId());
+	}
 
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeBoolean(false);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeBoolean(false);
-			out.writeShort(1);// index
-			out.writeByte(1);
-		}
+	public static boolean sendGamePacket(Player player, PacketContext context) {
+		// safe cast
+		PacketEncoder<PacketContext> packet = (PacketEncoder<PacketContext>) PacketRepository.getPacketEncoder(context);
+		packet.encode(player, context);
 
+		Preconditions.checkArgument(packet.getId() != -1);
+
+		player.getChannel().write(new GamePacketResponse(packet));
+		return true;
 	}
 
 }

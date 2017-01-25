@@ -22,45 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
+package com.quavo.osrs.game.world.region;
 
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.MessageToByteEncoder;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.world.World;
+import com.quavo.osrs.network.protocol.packet.GamePacketBuilder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
+public final class Viewport {
+
+	/**
+	 * The {@link Player}.
+	 */
+	private final Player player;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param player The player.
 	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
+	public Viewport(Player player) {
+		this.player = player;
 	}
 
-	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-		ChannelPipeline pipeline = ctx.pipeline();
-
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeBoolean(false);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeBoolean(false);
-			out.writeShort(1);// index
-			out.writeByte(1);
+	/**
+	 * Initiates the viewport/game.
+	 * 
+	 * @param builder The {@link GamePacketBuilder}.
+	 */
+	public void initViewport(GamePacketBuilder builder) {
+		builder.switchToBitAccess();
+		builder.putBits(30, player.getPosition().getPositionHash());
+		for (int i = 1; i < World.MAX_PLAYERS; i++) {
+			if (i != 1) {
+				builder.putBits(18, 0);
+			}
 		}
-
+		builder.switchToByteAccess();
 	}
 
 }

@@ -27,7 +27,6 @@ package com.quavo.osrs.network;
 import com.quavo.osrs.network.handler.NetworkMessage;
 import com.quavo.osrs.network.handler.NetworkMessageListener;
 import com.quavo.osrs.network.handler.NetworkMessageRepository;
-
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
@@ -48,6 +47,7 @@ public final class NetworkMessageHandler extends SimpleChannelInboundHandler<Net
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, NetworkMessage msg) throws Exception {
 		NetworkMessageListener<NetworkMessage> listener = NetworkMessageRepository.getNetworkListener(msg);
+
 		listener.handleMessage(ctx, msg);
 
 		ChannelPipeline pipeline = ctx.pipeline();
@@ -56,7 +56,7 @@ public final class NetworkMessageHandler extends SimpleChannelInboundHandler<Net
 		if (pipeline.context(handler) != null) {
 
 			// flush for specific handler.
-			pipeline.context(handler).flush();
+			//pipeline.context(handler).flush();
 		}
 	}
 

@@ -27,6 +27,7 @@ package com.quavo;
 import com.quavo.osrs.network.NetworkExecutor;
 import com.quavo.osrs.network.handler.NetworkMessageRepository;
 import com.quavo.osrs.network.protocol.cache.CacheManager;
+import com.quavo.osrs.network.protocol.packet.PacketRepository;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -49,6 +50,8 @@ public final class Quavo {
 
 		CacheManager.load();
 		System.out.println("Registered " + NetworkMessageRepository.LISTENERS.size() + " network listener(s).");
+		System.out.println("Registered " + PacketRepository.PACKET_ENCODERS.size() + " packet encoder(s).");
+		System.out.println("Registered " + PacketRepository.PACKET_DECODERS.size() + " packet decoder(s).");
 
 		// Start the network.
 		NetworkExecutor.start();
