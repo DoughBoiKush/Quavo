@@ -22,56 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network;
+package com.quavo.osrs.network.protocol.codec.login.world;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.NetworkMessageRepository;
-import io.netty.channel.ChannelHandler;
+import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
+import com.quavo.osrs.network.protocol.ClientMessage;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class NetworkMessageHandler extends SimpleChannelInboundHandler<NetworkMessage> {
+public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
 
 	/**
 	 * Constructs a new object.
 	 */
-	public NetworkMessageHandler() {
-		super(true);// auto release reference counts.
+	public WorldLoginEncoder() {
+		super(WorldLoginResponse.class);
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, NetworkMessage msg) throws Exception {
-		NetworkMessageListener<NetworkMessage> listener = NetworkMessageRepository.getNetworkListener(msg);
-
-		listener.handleMessage(ctx, msg);
-
+	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
+		ClientMessage message = msg.getMessage();
 		ChannelPipeline pipeline = ctx.pipeline();
-		ChannelHandler handler = msg.getHandler();
 
-		if (pipeline.context(handler) != null) {
-
-			// flush for specific handler.
-			//pipeline.context(handler).flush();
+		out.writeByte(message.getId());
+		if (message == ClientMessage.SUCCESSFUL) {
+			out.writeBoolean(false);
+			out.writeByte(0);
+			out.writeByte(0);
+			out.writeByte(0);
+			out.writeByte(0);
+			out.writeByte(2);// rights
+			out.writeBoolean(false);
+			out.writeShort(1);// index
+			out.writeByte(1);
 		}
-	}
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (cause.getMessage().equals("An existing connection was forcibly closed by the remote host")) {
-			return;
-		}
-
-		cause.printStackTrace();
-	}
-
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		ctx.flush();
 	}
 
 }

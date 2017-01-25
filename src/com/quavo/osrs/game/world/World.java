@@ -22,22 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.game.world;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.world.region.Position;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class World {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
-	}
+	/**
+	 * The maximum amount of players allowed in a world at one time.
+	 */
+	public static final int MAX_PLAYERS = 2048;
+
+	/**
+	 * The default position of each {@link Node} in the world.
+	 */
+	public static final Position DEFAULT_POSITION = new Position(3222, 3222, 0);
 
 }

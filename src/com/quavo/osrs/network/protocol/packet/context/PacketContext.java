@@ -22,22 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
-
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+package com.quavo.osrs.network.protocol.packet.context;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public interface PacketContext {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
-	}
+	/**
+	 * AN EMPTY INTERFACE
+	 */
 
 }

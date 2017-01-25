@@ -22,22 +22,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.util;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import net.burtleburtle.bob.rand.IsaacRandom;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class IsaacRandomPair {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * The {@link IsaacRandom} used for encoding.
+	 */
+	private final IsaacRandom encoderRandom;
+
+	/**
+	 * The {@link IsaacRandom} used for decoding.
+	 */
+	private final IsaacRandom decoderRandom;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param encoderRandom The encoder {@link IsaacRandom}.
+	 * @param decoderRandom The decoder {@link IsaacRandom}.
+	 */
+	public IsaacRandomPair(IsaacRandom encoderRandom, IsaacRandom decoderRandom) {
+		this.encoderRandom = encoderRandom;
+		this.decoderRandom = decoderRandom;
+	}
+
+	/**
+	 * Gets the encoderRandom.
+	 * 
+	 * @return the encoderRandom
+	 */
+	public IsaacRandom getEncoderRandom() {
+		return encoderRandom;
+	}
+
+	/**
+	 * Gets the decoderRandom.
+	 * 
+	 * @return the decoderRandom
+	 */
+	public IsaacRandom getDecoderRandom() {
+		return decoderRandom;
 	}
 
 }

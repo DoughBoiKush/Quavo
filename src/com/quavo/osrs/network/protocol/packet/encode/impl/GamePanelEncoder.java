@@ -22,22 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.packet.encode.impl;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.network.protocol.packet.DataOrder;
+import com.quavo.osrs.network.protocol.packet.DataType;
+import com.quavo.osrs.network.protocol.packet.PacketType;
+import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+
+	/**
+	 * Constructs a new object.
+	 */
+	public GamePanelEncoder() {
+		super(92, PacketType.FIXED);
+	}
 
 	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	public void encode(Player player, GamePanelContext context) {
+		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
 	}
 
 }

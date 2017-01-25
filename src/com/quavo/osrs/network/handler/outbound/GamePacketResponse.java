@@ -22,22 +22,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.handler.outbound;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class GamePacketResponse {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * The {@link PacketEncoder} for writing to the connected client.
+	 */
+	private final PacketEncoder<PacketContext> packet;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param packet The packet.
+	 */
+	public GamePacketResponse(PacketEncoder<PacketContext> packet) {
+		this.packet = packet;
+	}
+
+	/**
+	 * Gets the packet.
+	 * 
+	 * @return the packet
+	 */
+	public PacketEncoder<PacketContext> getPacket() {
+		return packet;
 	}
 
 }

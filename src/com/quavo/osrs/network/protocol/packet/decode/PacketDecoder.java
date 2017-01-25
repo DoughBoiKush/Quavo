@@ -22,22 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.packet.decode;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.network.protocol.packet.GamePacketReader;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public interface PacketDecoder {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
-	}
+	/**
+	 * Reads a packet.
+	 *
+	 * @param player The player.
+	 * @param packetId The packet id.
+	 * @param reader The packet buffer.
+	 */
+	void readPacket(Player player, int packetId, GamePacketReader reader);
+
+	/**
+	 * Gets available packet ids for each incoming packet.
+	 *
+	 * @return The packet ids.
+	 */
+	int[] packetIds();
 
 }

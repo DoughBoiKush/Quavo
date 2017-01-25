@@ -22,22 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class GamePanelContext implements PacketContext {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * The id of the game panel.
+	 */
+	private final int id;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param id The id.
+	 */
+	public GamePanelContext(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * Gets the id.
+	 * 
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 
 }

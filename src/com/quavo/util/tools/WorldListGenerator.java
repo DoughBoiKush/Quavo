@@ -22,22 +22,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.util.tools;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class WorldListGenerator {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * Runs the application.
+	 * 
+	 * @param args Runtime arguments.
+	 */
+	public static void main(String[] args) {
+		try {
+			/** SET HERE */
+			final int id = 301;
+			final int flag = 0x8;
+			final String domain = "127.0.0.1";
+			final String activity = "Home World";
+			final int location = 225;
+			final int population = 1;
+			/** END */
+
+			DataOutputStream output = new DataOutputStream(new FileOutputStream("./repo/slr.ws"));
+			output.writeInt(35);
+			output.writeShort(1);
+			output.writeShort(id);
+			output.writeInt(flag);
+			output.writeBytes(domain);
+			output.writeBytes(activity);
+			output.writeByte(location);
+			output.writeShort(population);
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

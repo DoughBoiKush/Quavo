@@ -22,22 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.game.world.region;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.world.World;
+import com.quavo.osrs.network.protocol.packet.GamePacketBuilder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class Viewport {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * The {@link Player}.
+	 */
+	private final Player player;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param player The player.
+	 */
+	public Viewport(Player player) {
+		this.player = player;
+	}
+
+	/**
+	 * Initiates the viewport/game.
+	 * 
+	 * @param builder The {@link GamePacketBuilder}.
+	 */
+	public void initViewport(GamePacketBuilder builder) {
+		builder.switchToBitAccess();
+		builder.putBits(30, player.getPosition().getPositionHash());
+		for (int i = 1; i < World.MAX_PLAYERS; i++) {
+			if (i != 1) {
+				builder.putBits(18, 0);
+			}
+		}
+		builder.switchToByteAccess();
 	}
 
 }

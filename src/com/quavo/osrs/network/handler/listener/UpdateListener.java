@@ -34,7 +34,6 @@ import com.quavo.osrs.network.protocol.cache.CacheManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import net.openrs.cache.Cache;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -43,16 +42,15 @@ public final class UpdateListener implements NetworkMessageListener<UpdateReques
 
 	@Override
 	public void handleMessage(ChannelHandlerContext ctx, UpdateRequest msg) {
-		Cache cache = CacheManager.getCache();
 		int type = msg.getType();
 		int id = msg.getId();
 		ByteBuf container = null;
 
 		try {
 			if (type == 0xff && id == 0xff) {
-				container = Unpooled.wrappedBuffer(CacheManager.getChecksumTable());
+				container = Unpooled.wrappedBuffer(CacheManager.getChecksumBuffer());
 			} else {
-				container = Unpooled.wrappedBuffer(cache.getStore().read(type, id));
+				container = Unpooled.wrappedBuffer(CacheManager.getCache().getStore().read(type, id));
 				if (type != 0xff) {
 					container = container.slice(0, container.readableBytes() - 2);
 				}
@@ -61,7 +59,7 @@ public final class UpdateListener implements NetworkMessageListener<UpdateReques
 			e.printStackTrace();
 		}
 
-		ctx.writeAndFlush(new UpdateResponse(type, id, msg.isPriority(), container));
+		ctx.write(new UpdateResponse(type, id, msg.isPriority(), container));
 	}
 
 }

@@ -22,22 +22,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.codec.login;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public enum LoginType {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * A new login connection.
+	 */
+	NEW_CONNECTION_LOGIN(16),
+
+	/**
+	 * A reconnecting login.
+	 */
+	RECONNECTION_LOGIN(18);
+
+	/**
+	 * The id for each login type.
+	 */
+	private final int id;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param id The id for each type.
+	 */
+	LoginType(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * Gets and returns a connection type wrapped in a {@link Optional}.
+	 * 
+	 * @param id The id used for getting a login type.
+	 * @return The login type.
+	 */
+	public static Optional<LoginType> getType(int id) {
+		return Arrays.stream(LoginType.values()).filter(a -> a.id == id).findAny();
+	}
+
+	/**
+	 * Gets the id.
+	 * 
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 
 }

@@ -22,22 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class StaticRegionContext implements PacketContext {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * Checks if a full update is required.
+	 */
+	private final boolean fullUpdate;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param fullUpdate Checks if a full update is required.
+	 */
+	public StaticRegionContext(boolean fullUpdate) {
+		this.fullUpdate = fullUpdate;
+	}
+
+	/**
+	 * Gets the fullUpdate.
+	 * 
+	 * @return the fullUpdate
+	 */
+	public boolean isFullUpdate() {
+		return fullUpdate;
 	}
 
 }

@@ -22,57 +22,79 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.connection;
+package com.quavo.osrs.network.handler.outbound;
 
-import java.util.Arrays;
-import java.util.Optional;
+import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.network.protocol.ClientMessage;
+import com.quavo.util.IsaacRandomPair;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public enum ConnectionType {
+public final class WorldLoginResponse {
 
 	/**
-	 * Represents the login connection.
+	 * The {@link Player}.
 	 */
-	LOGIN_CONNECTION(14),
+	private final Player player;
 
 	/**
-	 * Represents the handshake connection.
+	 * The {@link ClientMessage}.
 	 */
-	HANDSHAKE_CONNECTION(15);
+	private final ClientMessage message;
 
 	/**
-	 * The protocol id for each connection type.
+	 * The {@link IsaacRandomPair}.
 	 */
-	private final int id;
+	private final IsaacRandomPair isaacPair;
 
 	/**
 	 * Constructs a new object.
 	 * 
-	 * @param id The connection id value for each type.
+	 * @param message The {@link ClientMessage}.
 	 */
-	ConnectionType(int id) {
-		this.id = id;
+	public WorldLoginResponse(ClientMessage message) {
+		this(null, message, null);
 	}
 
 	/**
-	 * Gets and returns a connection type wrapped in a {@link Optional}.
+	 * Constructs a new object.
 	 * 
-	 * @param id The id used for getting a connection type.
-	 * @return The connection type.
+	 * @param player The {@link Player}.
+	 * @param message The {@link ClientMessage}.
+	 * @param isaacPair The {@link IsaacRandomPair}.
 	 */
-	public static Optional<ConnectionType> getType(int id) {
-		return Arrays.stream(ConnectionType.values()).filter(a -> a.id == id).findAny();
+	public WorldLoginResponse(Player player, ClientMessage message, IsaacRandomPair isaacPair) {
+		this.player = player;
+		this.message = message;
+		this.isaacPair = isaacPair;
 	}
 
 	/**
-	 * Gets the id.
+	 * Gets the player.
 	 * 
-	 * @return the id
+	 * @return the player
 	 */
-	public int getId() {
-		return id;
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Gets the message.
+	 * 
+	 * @return the message
+	 */
+	public ClientMessage getMessage() {
+		return message;
+	}
+
+	/**
+	 * Gets the isaacPair.
+	 * 
+	 * @return the isaacPair
+	 */
+	public IsaacRandomPair getIsaacPair() {
+		return isaacPair;
 	}
 
 }

@@ -22,56 +22,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network;
+package com.quavo.osrs.network.handler.listener;
 
-import com.quavo.osrs.network.handler.NetworkMessage;
+import com.google.common.base.Preconditions;
+import com.quavo.osrs.game.node.actor.player.Player;
 import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.NetworkMessageRepository;
-import io.netty.channel.ChannelHandler;
+import com.quavo.osrs.network.handler.inbound.GamePacketRequest;
+import com.quavo.osrs.network.handler.outbound.GamePacketResponse;
+import com.quavo.osrs.network.protocol.packet.PacketRepository;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class NetworkMessageHandler extends SimpleChannelInboundHandler<NetworkMessage> {
-
-	/**
-	 * Constructs a new object.
-	 */
-	public NetworkMessageHandler() {
-		super(true);// auto release reference counts.
-	}
+public final class GamePacketListener implements NetworkMessageListener<GamePacketRequest> {
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, NetworkMessage msg) throws Exception {
-		NetworkMessageListener<NetworkMessage> listener = NetworkMessageRepository.getNetworkListener(msg);
-
-		listener.handleMessage(ctx, msg);
-
-		ChannelPipeline pipeline = ctx.pipeline();
-		ChannelHandler handler = msg.getHandler();
-
-		if (pipeline.context(handler) != null) {
-
-			// flush for specific handler.
-			//pipeline.context(handler).flush();
-		}
+	public void handleMessage(ChannelHandlerContext ctx, GamePacketRequest msg) {
+		System.out.println("INCOMING PACKET: " + msg.getId());
 	}
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (cause.getMessage().equals("An existing connection was forcibly closed by the remote host")) {
-			return;
-		}
+	public static boolean sendGamePacket(Player player, PacketContext context) {
+		// safe cast
+		PacketEncoder<PacketContext> packet = (PacketEncoder<PacketContext>) PacketRepository.getPacketEncoder(context);
+		packet.encode(player, context);
 
-		cause.printStackTrace();
-	}
+		Preconditions.checkArgument(packet.getId() != -1);
 
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		ctx.flush();
+		player.getChannel().write(new GamePacketResponse(packet));
+		return true;
 	}
 
 }

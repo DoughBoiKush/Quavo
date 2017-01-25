@@ -30,6 +30,7 @@ import com.quavo.osrs.network.protocol.codec.connection.ConnectionEncoder;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -66,6 +67,7 @@ public final class NetworkExecutor {
 			}
 
 		});
+		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 
 		try {
 			bootstrap.bind(Constants.HOST_NAME, Constants.HOST_PORT).sync();

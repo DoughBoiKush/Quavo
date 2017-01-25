@@ -22,22 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.game.node;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.world.region.Position;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public abstract class Node {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * The {@link Position}.
+	 */
+	protected Position position;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param position The position.
+	 */
+	public Node(Position position) {
+		this.position = position;
+	}
+
+	/**
+	 * Gets the position.
+	 * 
+	 * @return the position
+	 */
+	public Position getPosition() {
+		return position;
+	}
+
+	/**
+	 * Sets the position.
+	 * 
+	 * @param position the position to set
+	 */
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 }

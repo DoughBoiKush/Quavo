@@ -22,42 +22,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.utilities;
+package com.quavo.osrs.network.handler.outbound;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
-import com.quavo.osrs.Constants;
+import com.quavo.osrs.network.protocol.ClientMessage;
+import com.quavo.osrs.network.protocol.codec.login.LoginType;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class FileUtilities {
+public final class LoginResponse {
 
 	/**
-	 * Gets the class files inside a directory.
-	 *
-	 * @param directory The directory.
-	 * @return An array of classes.
-	 * @throws IOException If an I/O exception is thrown.
-	 * @throws ClassNotFoundException If the class is not found.
+	 * The {@link ClientMessage} to send back to the client.
 	 */
-	public static Class<?>[] getAllClasses(String directory) throws IOException, ClassNotFoundException {
-		String path = Constants.OUTPUT_DIRECTORY + "/" + directory.replace('.', '/') + "/";
-		File dir = new File(path);
-		List<Class<?>> classes = new ArrayList<>();
-		List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-		for (File file : files) {
-			if (file.getName().endsWith(".class")) {
-				classes.add(Class.forName(file.getParent().replace("\\", ".").replace(Constants.OUTPUT_DIRECTORY + ".", "") + '.' + file.getName().substring(0, file.getName().length() - 6)));
-			}
-		}
-		return classes.toArray(new Class[classes.size()]);
+	private final ClientMessage message;
+
+	/**
+	 * The {@link LoginType} used for this response.
+	 */
+	private final LoginType type;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param message The {@link ClientMessage} to send back to the client.
+	 * @param type The {@link LoginType}.
+	 */
+	public LoginResponse(ClientMessage message, LoginType type) {
+		this.message = message;
+		this.type = type;
+	}
+
+	/**
+	 * Gets the message.
+	 * 
+	 * @return the message
+	 */
+	public ClientMessage getMessage() {
+		return message;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public LoginType getType() {
+		return type;
 	}
 
 }

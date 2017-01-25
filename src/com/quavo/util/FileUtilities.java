@@ -22,22 +22,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.util;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.netty.channel.ChannelHandlerContext;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+
+import com.quavo.osrs.Constants;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class FileUtilities {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * Gets the class files inside a directory.
+	 *
+	 * @param directory The directory.
+	 * @return An array of classes.
+	 * @throws IOException If an I/O exception is thrown.
+	 * @throws ClassNotFoundException If the class is not found.
+	 */
+	public static Class<?>[] getAllClasses(String directory) throws IOException, ClassNotFoundException {
+		String path = Constants.OUTPUT_DIRECTORY + "/" + directory.replace('.', '/') + "/";
+		File dir = new File(path);
+		List<Class<?>> classes = new ArrayList<>();
+		List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for (File file : files) {
+			if (file.getName().endsWith(".class")) {
+				classes.add(Class.forName(file.getParent().replace("\\", ".").replace(Constants.OUTPUT_DIRECTORY + ".", "") + '.' + file.getName().substring(0, file.getName().length() - 6)));
+			}
+		}
+		return classes.toArray(new Class[classes.size()]);
 	}
 
 }

@@ -22,56 +22,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network;
+package com.quavo.osrs.network.handler.inbound;
 
 import com.quavo.osrs.network.handler.NetworkMessage;
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.NetworkMessageRepository;
+import com.quavo.osrs.network.protocol.codec.login.LoginType;
+
 import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class NetworkMessageHandler extends SimpleChannelInboundHandler<NetworkMessage> {
+public final class LoginRequest extends NetworkMessage {
+
+	/**
+	 * The {@link LoginType} for a login request.
+	 */
+	private final LoginType type;
+
+	/**
+	 * The version of the client attempting to login.
+	 */
+	private final int version;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param handler The {@link ChannelHandler} used for this request.
+	 * @param type The {@link LoginType}.
+	 * @param version The client version.
 	 */
-	public NetworkMessageHandler() {
-		super(true);// auto release reference counts.
+	public LoginRequest(ChannelHandler handler, LoginType type, int version) {
+		super(handler);
+		this.type = type;
+		this.version = version;
 	}
 
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, NetworkMessage msg) throws Exception {
-		NetworkMessageListener<NetworkMessage> listener = NetworkMessageRepository.getNetworkListener(msg);
-
-		listener.handleMessage(ctx, msg);
-
-		ChannelPipeline pipeline = ctx.pipeline();
-		ChannelHandler handler = msg.getHandler();
-
-		if (pipeline.context(handler) != null) {
-
-			// flush for specific handler.
-			//pipeline.context(handler).flush();
-		}
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public LoginType getType() {
+		return type;
 	}
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (cause.getMessage().equals("An existing connection was forcibly closed by the remote host")) {
-			return;
-		}
-
-		cause.printStackTrace();
-	}
-
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-		ctx.flush();
+	/**
+	 * Gets the version.
+	 * 
+	 * @return the version
+	 */
+	public int getVersion() {
+		return version;
 	}
 
 }

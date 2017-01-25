@@ -44,7 +44,7 @@ public final class HandshakeListener implements NetworkMessageListener<Handshake
 			message = ClientMessage.OUT_OF_DATE;
 		}
 
-		ctx.writeAndFlush(new HandshakeResponse(message));
+		ctx.write(new HandshakeResponse(message));
 	}
 
 }

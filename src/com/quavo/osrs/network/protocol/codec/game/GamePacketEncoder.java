@@ -22,49 +22,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.connection;
+package com.quavo.osrs.network.protocol.codec.game;
 
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import com.quavo.osrs.network.protocol.codec.handshake.HandshakeDecoder;
-import com.quavo.osrs.network.protocol.codec.handshake.HandshakeEncoder;
-import com.quavo.osrs.network.protocol.codec.login.LoginDecoder;
-import com.quavo.osrs.network.protocol.codec.login.LoginEncoder;
+import com.quavo.osrs.network.handler.outbound.GamePacketResponse;
+import com.quavo.osrs.network.protocol.packet.PacketType;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.MessageToByteEncoder;
+import net.burtleburtle.bob.rand.IsaacRandom;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionEncoder extends MessageToByteEncoder<ConnectionResponse> {
+public final class GamePacketEncoder extends MessageToByteEncoder<GamePacketResponse> {
+
+	/**
+	 * The {@link IsaacRandom} used for encoding packets.
+	 */
+	private final IsaacRandom encoder;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param encoder The {@link IsaacRandom} for encoding packets.
 	 */
-	public ConnectionEncoder() {
-		super(ConnectionResponse.class);
+	public GamePacketEncoder(IsaacRandom encoder) {
+		this.encoder = encoder;
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, ConnectionResponse msg, ByteBuf out) throws Exception {
-		ChannelPipeline pipeline = ctx.pipeline();
-
-		switch (msg.getType()) {
-		case HANDSHAKE_CONNECTION:
-			pipeline.addAfter("decoder", "handshake.encoder", new HandshakeEncoder());
-			pipeline.replace("decoder", "handshake.decoder", new HandshakeDecoder());
-			break;
-		case LOGIN_CONNECTION:
-			out.writeByte(ClientMessage.SUCCESSFUL_CONNECTION.getId());
-			pipeline.addAfter("decoder", "login.encoder", new LoginEncoder());
-			pipeline.replace("decoder", "login.decoder", new LoginDecoder());
-			break;
+	protected void encode(ChannelHandlerContext ctx, GamePacketResponse msg, ByteBuf out) throws Exception {
+		PacketEncoder<PacketContext> packet = msg.getPacket();
+		int id = packet.getId();
+		PacketType type = packet.getPacketType();
+		ByteBuf buffer = packet.getBuilder().getBuffer();
+		
+		out.writeByte(id/* + encoder.nextInt()*/);
+		if (type == PacketType.VARIABLE_BYTE) {
+			out.writeByte(buffer.writerIndex());
+		} else if (type == PacketType.VARIABLE_SHORT) {
+			out.writeShort(buffer.writerIndex());
 		}
-
-		pipeline.remove(this);
+		out.writeBytes(buffer);
 	}
 
 }

@@ -22,22 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.network.protocol.codec.login;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
+import java.util.List;
 
+import com.quavo.osrs.network.handler.inbound.LoginRequest;
+
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class LoginDecoder extends ByteToMessageDecoder {
 
 	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		if (!in.isReadable() || in.readableBytes() < 8) {
+			return;
+		}
+
+		LoginType.getType(in.readByte()).filter(a -> in.readShort() == in.readableBytes()).ifPresent(a -> out.add(new LoginRequest(this, a, in.readInt())));
 	}
 
 }

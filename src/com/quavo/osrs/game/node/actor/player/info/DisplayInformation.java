@@ -22,22 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.handler.listener;
+package com.quavo.osrs.game.node.actor.player.info;
 
-import com.quavo.osrs.network.handler.NetworkMessageListener;
-import com.quavo.osrs.network.handler.inbound.ConnectionRequest;
-import com.quavo.osrs.network.handler.outbound.ConnectionResponse;
-
-import io.netty.channel.ChannelHandlerContext;
+import com.quavo.osrs.game.model.inter.DisplayMode;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class ConnectionListener implements NetworkMessageListener<ConnectionRequest> {
+public final class DisplayInformation {
 
-	@Override
-	public void handleMessage(ChannelHandlerContext ctx, ConnectionRequest msg) {
-		ctx.write(new ConnectionResponse(msg.getType()));
+	/**
+	 * The display mode.
+	 */
+	private DisplayMode displayMode;
+
+	/**
+	 * Gets the displayMode.
+	 * 
+	 * @return the displayMode
+	 */
+	public DisplayMode getDisplayMode() {
+		return displayMode;
+	}
+
+	/**
+	 * Sets the displayMode.
+	 * 
+	 * @param displayMode the displayMode to set
+	 */
+	public void setDisplayMode(DisplayMode displayMode) {
+		this.displayMode = displayMode;
 	}
 
 }
