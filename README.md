@@ -10,3 +10,7 @@ An open source OSRS emulation server aimed to be fast and informative.
 - Connection.
 - Handshake.
 - Update Server.
+
+# Influences
+- Kyle Fricilone [https://github.com/kfricilone]
+- Apollo [https://github.com/apollo-rsps/apollo]
