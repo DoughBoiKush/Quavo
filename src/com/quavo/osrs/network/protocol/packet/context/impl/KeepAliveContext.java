@@ -22,36 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.game.node.actor.player.info;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.game.model.inter.DisplayMode;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class DisplayInformation {
-
-	/**
-	 * The display mode.
-	 */
-	private DisplayMode displayMode;
-
-	/**
-	 * Gets the displayMode.
-	 * 
-	 * @return the displayMode
-	 */
-	public DisplayMode getDisplayMode() {
-		return displayMode;
-	}
-
-	/**
-	 * Sets the displayMode.
-	 * 
-	 * @param displayMode the displayMode to set
-	 */
-	public void setDisplayMode(DisplayMode displayMode) {
-		this.displayMode = displayMode;
-	}
+public final class KeepAliveContext implements PacketContext {
 
 }

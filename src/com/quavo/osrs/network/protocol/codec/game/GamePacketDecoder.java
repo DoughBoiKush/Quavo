@@ -25,10 +25,14 @@
 package com.quavo.osrs.network.protocol.codec.game;
 
 import java.util.List;
+import java.util.Optional;
+
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.handler.inbound.GamePacketRequest;
 import com.quavo.osrs.network.protocol.packet.GamePacketReader;
-import com.quavo.osrs.network.protocol.packet.PacketConstants;
+import com.quavo.osrs.network.protocol.packet.PacketIdentifier;
 import com.quavo.osrs.network.protocol.packet.PacketType;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -40,73 +44,56 @@ import net.burtleburtle.bob.rand.IsaacRandom;
 public final class GamePacketDecoder extends ByteToMessageDecoder {
 
 	/**
-	 * The decryptor used to decode the {@link IncomingPacket}.
+	 * The player.
 	 */
-	private final IsaacRandom decryptor;
-
-	private PacketState state = PacketState.READ_ID;
-	private PacketType type;
-
-	private int opcode, size;
+	private final Player player;
 
 	/**
-	 * Creates a new {@link GamePacketDecoder}
-	 * 
-	 * @param decryptor The decrypting {@link IsaacCipher}.
+	 * Suppressed because isaac is impossible with no packets right now.
 	 */
-	public GamePacketDecoder(IsaacRandom decryptor) {
-		this.decryptor = decryptor;
+	@SuppressWarnings("unused")
+	private final IsaacRandom decoder;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param player The player.
+	 * @param decoder The {@link IsaacRandom} decoder.
+	 */
+	public GamePacketDecoder(Player player, IsaacRandom decoder) {
+		this.player = player;
+		this.decoder = decoder;
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
-		if (state == PacketState.READ_ID) {
-			if (!buf.isReadable())
-				return;
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		while (in.readableBytes() > 0 && player.getChannel().isRegistered()) {
 
-			opcode = (buf.readByte()/* - random.nextInt()*/) & 0xFF;
-			size = PacketConstants.PACKET_SIZES[opcode];
+			int opcode = in.readUnsignedByte();
+			Optional<PacketIdentifier> data = PacketIdentifier.getPacket(opcode);
+			if (data.isPresent()) {
+				PacketIdentifier packet = data.get();
 
-			if (size == -2) {
-				type = PacketType.VARIABLE_SHORT;
-			} else if (size == -1) {
-				type = PacketType.VARIABLE_BYTE;
-			} else {
-				type = PacketType.FIXED;
-			}
-
-			if (size == -3) {
-				// type = PacketType.FIXED;
-				// size = buf.readableBytes();
-				throw new IllegalStateException("Illegal Opcode: [" + opcode + "]");
-			}
-
-			state = type != PacketType.FIXED ? PacketState.READ_SIZE : PacketState.READ_PAYLOAD;
-		}
-
-		if (state == PacketState.READ_SIZE) {
-			if (!buf.isReadable())
-				return;
-
-			if (type == PacketType.VARIABLE_BYTE) {
-				size = buf.readUnsignedByte();
-			} else if (type == PacketType.VARIABLE_SHORT) {
-				if (buf.readableBytes() >= 2) {
-					size = buf.readUnsignedShort();
+				int size = packet.getSize();
+				if (packet.getType() == PacketType.VARIABLE_BYTE) {
+					if (in.readableBytes() < 1) {
+						return;
+					}
+					size = in.readUnsignedByte();
+				} else if (packet.getType() == PacketType.VARIABLE_SHORT) {
+					if (in.readableBytes() < 2) {
+						return;
+					}
+					size = in.readUnsignedShort();
 				}
+
+				ByteBuf payload = in.readBytes(new byte[size]);
+				out.add(new GamePacketRequest(this, player, packet.getId(), new GamePacketReader(payload)));
+
+			} else {
+				System.out.println("No data present for incoming packet: " + opcode + ".");
+				in.readBytes(new byte[in.readableBytes()]);
 			}
-
-			state = PacketState.READ_PAYLOAD;
-		}
-
-		if (state == PacketState.READ_PAYLOAD) {
-			if (buf.readableBytes() < size)
-				return;
-
-			ByteBuf payload = buf.readBytes(size);
-			state = PacketState.READ_ID;
-
-			out.add(new GamePacketRequest(this, opcode, new GamePacketReader(payload)));
 		}
 	}
 

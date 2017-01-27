@@ -22,44 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.login.world;
+package com.quavo.osrs.network.protocol.packet.decode.impl;
 
-import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
-import com.quavo.osrs.network.protocol.ClientMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
+import com.quavo.osrs.network.protocol.packet.GamePacketReader;
+import com.quavo.osrs.network.protocol.packet.PacketIdentifier;
+import com.quavo.osrs.network.protocol.packet.context.impl.KeepAliveContext;
+import com.quavo.osrs.network.protocol.packet.decode.PacketDecoder;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResponse> {
+public final class KeepAliveDecoder implements PacketDecoder {
 
-	/**
-	 * Constructs a new object.
-	 */
-	public WorldLoginEncoder() {
-		super(WorldLoginResponse.class);
+	@Override
+	public void readPacket(Player player, int packetId, GamePacketReader reader) {
+		player.sendPacket(new KeepAliveContext());
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, WorldLoginResponse msg, ByteBuf out) throws Exception {
-		ClientMessage message = msg.getMessage();
-
-		out.writeByte(message.getId());
-		if (message == ClientMessage.SUCCESSFUL) {
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(0);
-			out.writeByte(2);// rights
-			out.writeByte(0);
-			out.writeShort(1);// index
-			out.writeByte(1);
-		}
-		
-		ctx.pipeline().remove(this);
+	public PacketIdentifier[] identifiers() {
+		return new PacketIdentifier[] { PacketIdentifier.PING };
 	}
 
 }

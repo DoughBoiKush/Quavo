@@ -24,10 +24,10 @@
  */
 package com.quavo.osrs.network.handler.inbound;
 
+import com.quavo.osrs.game.model.entity.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.info.LoginClearance;
+import com.quavo.osrs.game.model.entity.actor.player.info.MachineInformation;
 import com.quavo.osrs.game.model.inter.DisplayMode;
-import com.quavo.osrs.game.node.actor.player.Player;
-import com.quavo.osrs.game.node.actor.player.info.LoginClearance;
-import com.quavo.osrs.game.node.actor.player.info.MachineInformation;
 import com.quavo.osrs.network.handler.NetworkMessage;
 import com.quavo.osrs.network.protocol.codec.login.LoginType;
 import com.quavo.util.IsaacRandomPair;

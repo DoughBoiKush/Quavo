@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.game.node.actor.player.info;
+package com.quavo.osrs.game.model.entity.actor.player.info;
 
 import java.util.Arrays;
 import java.util.Optional;

@@ -37,7 +37,7 @@ public final class World {
 	public static final int MAX_PLAYERS = 2048;
 
 	/**
-	 * The default position of each {@link Node} in the world.
+	 * The default position of each {@link Entity} in the world.
 	 */
 	public static final Position DEFAULT_POSITION = new Position(3222, 3222, 0);
 

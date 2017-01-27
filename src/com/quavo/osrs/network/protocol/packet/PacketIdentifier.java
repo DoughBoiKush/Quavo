@@ -22,78 +22,89 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.game.node.actor.player;
+package com.quavo.osrs.network.protocol.packet;
 
-import com.quavo.osrs.game.node.actor.Actor;
-import com.quavo.osrs.game.world.region.Viewport;
-import com.quavo.osrs.network.handler.listener.GamePacketListener;
-import com.quavo.osrs.network.protocol.packet.context.PacketContext;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
-import com.quavo.osrs.network.protocol.packet.context.impl.StaticRegionContext;
-
-import io.netty.channel.Channel;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class Player extends Actor {
+public enum PacketIdentifier {
 
 	/**
-	 * The {@link Channel}.
+	 * The keep alive packet. This keeps the client from disconnecting.
 	 */
-	private final Channel channel;
+	PING(71, 0, PacketType.FIXED),
+
+	/** UNKNOWN PACKETS */
+	P121(121, -1, PacketType.VARIABLE_BYTE),
+	P62(62, 1, PacketType.FIXED),
+	P148(148, 6, PacketType.FIXED);
 
 	/**
-	 * The {@link Viewport}.
+	 * The id for each packet.
 	 */
-	private final Viewport viewport = new Viewport(this);
+	private final int id;
+
+	/**
+	 * The size for each packet.
+	 */
+	private final int size;
+
+	/**
+	 * The {@link PacketType}.
+	 */
+	private final PacketType type;
 
 	/**
 	 * Constructs a new object.
 	 * 
-	 * @param channel The channel.
+	 * @param id The packet id.
+	 * @param size The packet size.
+	 * @param type The {@link PacketType}.
 	 */
-	public Player(Channel channel) {
-		this.channel = channel;
+	PacketIdentifier(int id, int size, PacketType type) {
+		this.id = id;
+		this.size = size;
+		this.type = type;
 	}
-
+	
 	/**
-	 * Initiates the player.
-	 */
-	public void init() {
-		sendPacket(new StaticRegionContext(true));
-		sendPacket(new GamePanelContext(548));
-	}
-
-	/**
-	 * Sends a packet.
+	 * Gets and returns a packet wrapped in a {@link Optional}.
 	 * 
-	 * @param context The {@link PacketContext}.
+	 * @param id The id used for getting a packet type.
+	 * @return The packet type.
 	 */
-	public void sendPacket(PacketContext context) {
-		if (GamePacketListener.sendGamePacket(this, context)) {
-			if (channel.isRegistered()) {
-				channel.flush();
-			}
-		}
+	public static Optional<PacketIdentifier> getPacket(int id) {
+		return Arrays.stream(PacketIdentifier.values()).filter(a -> a.id == id).findAny();
 	}
 
 	/**
-	 * Gets the viewport.
+	 * Gets the id.
 	 * 
-	 * @return the viewport
+	 * @return the id
 	 */
-	public Viewport getViewport() {
-		return viewport;
+	public int getId() {
+		return id;
 	}
 
 	/**
-	 * Gets the channel.
+	 * Gets the size.
 	 * 
-	 * @return the channel
+	 * @return the size
 	 */
-	public Channel getChannel() {
-		return channel;
+	public int getSize() {
+		return size;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public PacketType getType() {
+		return type;
 	}
 
 }

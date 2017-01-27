@@ -22,14 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.game.node;
+package com.quavo.osrs.game.model.entity;
 
 import com.quavo.osrs.game.world.region.Position;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public abstract class Node {
+public abstract class Entity {
 
 	/**
 	 * The {@link Position}.
@@ -41,7 +41,7 @@ public abstract class Node {
 	 * 
 	 * @param position The position.
 	 */
-	public Node(Position position) {
+	public Entity(Position position) {
 		this.position = position;
 	}
 

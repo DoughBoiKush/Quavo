@@ -24,7 +24,7 @@
  */
 package com.quavo.osrs.network.protocol.packet.encode.impl;
 
-import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.protocol.packet.DataOrder;
 import com.quavo.osrs.network.protocol.packet.DataTransformation;
 import com.quavo.osrs.network.protocol.packet.DataType;

@@ -56,7 +56,7 @@ public final class NetworkMessageHandler extends SimpleChannelInboundHandler<Net
 		if (pipeline.context(handler) != null) {
 
 			// flush for specific handler.
-			//pipeline.context(handler).flush();
+			pipeline.context(handler).flush();
 		}
 	}
 

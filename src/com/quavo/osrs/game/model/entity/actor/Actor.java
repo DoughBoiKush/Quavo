@@ -22,15 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.game.node.actor;
+package com.quavo.osrs.game.model.entity.actor;
 
-import com.quavo.osrs.game.node.Node;
+import com.quavo.osrs.game.model.entity.Entity;
 import com.quavo.osrs.game.world.World;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public abstract class Actor extends Node {
+public abstract class Actor extends Entity {
 
 	/**
 	 * Constructs a new object.

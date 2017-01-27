@@ -20,7 +20,7 @@ public final class PacketRepository {
      * Create an immutable map of incoming packets. The parsed packet ids and their packet counter parts dont ever change.
      * This is why we use an {@link ImmutableMap}.
      */
-    public static final ImmutableMap<int[], PacketDecoder> PACKET_DECODERS = incomingBuilder();
+    public static final ImmutableMap<PacketIdentifier[], PacketDecoder> PACKET_DECODERS = incomingBuilder();
 
     /**
      * Create an immutable map of outgoing packets. The parsed packet ids and their packet counter parts dont ever change.
@@ -55,15 +55,15 @@ public final class PacketRepository {
      *
      * @return The {@link ImmutableTable} built by this parser.
      */
-    public static ImmutableMap<int[], PacketDecoder> incomingBuilder() {
-        final ImmutableMap.Builder<int[], PacketDecoder> builder = ImmutableMap.builder();
+    public static ImmutableMap<PacketIdentifier[], PacketDecoder> incomingBuilder() {
+        final ImmutableMap.Builder<PacketIdentifier[], PacketDecoder> builder = ImmutableMap.builder();
         try {
             Class<?>[] incomingClasses = FileUtilities.getAllClasses(Constants.PRESENTATION + ".network.protocol.packet.decode.impl");
             for (Class<?> clazz : incomingClasses) {
                 Preconditions.checkArgument(PacketDecoder.class.isAssignableFrom(clazz), "Packet is not extending the incoming packet class.");
 
                 PacketDecoder packet = (PacketDecoder) clazz.newInstance();
-                builder.put(packet.packetIds(), packet);
+                builder.put(packet.identifiers(), packet);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,9 +89,9 @@ public final class PacketRepository {
      * @return The {@link PacketDecoder}.
      */
     public static PacketDecoder getPacketDecoder(int packetId) {
-        for (Entry<int[], PacketDecoder> entry : PACKET_DECODERS.entrySet()) {
-            for (int key : entry.getKey()) {
-                if (key == packetId) {
+        for (Entry<PacketIdentifier[], PacketDecoder> entry : PACKET_DECODERS.entrySet()) {
+            for (PacketIdentifier key : entry.getKey()) {
+                if (key.getId() == packetId) {
                     return entry.getValue();
                 }
             }

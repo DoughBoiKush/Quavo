@@ -24,7 +24,7 @@
  */
 package com.quavo.osrs.network.handler.listener;
 
-import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.handler.NetworkMessageListener;
 import com.quavo.osrs.network.handler.inbound.WorldLoginRequest;
 import com.quavo.osrs.network.handler.outbound.WorldLoginResponse;
@@ -34,6 +34,7 @@ import com.quavo.osrs.network.protocol.codec.game.GamePacketDecoder;
 import com.quavo.osrs.network.protocol.codec.game.GamePacketEncoder;
 
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -52,16 +53,14 @@ public final class WorldLoginListener implements NetworkMessageListener<WorldLog
 		ctx.write(new WorldLoginResponse(player, message, msg.getIsaacPair()));
 		
 
+		ChannelPipeline pipeline = ctx.pipeline();
+		pipeline.remove("login.encoder");
+		
 		// this isnt set automatically.
-		ctx.pipeline().remove("login.encoder");
-		ctx.pipeline().remove("world.decoder");
-		ctx.pipeline().remove("world.encoder");
-		ctx.pipeline().addBefore("adapter", "game.encoder", new GamePacketEncoder(msg.getIsaacPair().getEncoderRandom()));
-		System.out.println("Channels: " + ctx.channel().pipeline().names());
+		pipeline.addBefore("adapter", "game.encoder", new GamePacketEncoder(msg.getIsaacPair().getEncoderRandom()));
+		pipeline.replace("world.decoder", "game.decoder", new GamePacketDecoder(player, msg.getIsaacPair().getDecoderRandom()));
 		
 		player.init();
-		ctx.pipeline().addBefore("adapter", "game.decoder", new GamePacketDecoder(msg.getIsaacPair().getDecoderRandom()));
-
 	}
 
 	/**

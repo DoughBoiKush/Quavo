@@ -24,7 +24,7 @@
  */
 package com.quavo.osrs.game.world.region;
 
-import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.game.world.World;
 import com.quavo.osrs.network.protocol.packet.GamePacketBuilder;
 
