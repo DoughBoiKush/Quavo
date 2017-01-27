@@ -42,6 +42,7 @@ public final class GamePacketEncoder extends MessageToByteEncoder<GamePacketResp
 	/**
 	 * The {@link IsaacRandom} used for encoding packets.
 	 */
+	@SuppressWarnings("unused")
 	private final IsaacRandom encoder;
 
 	/**

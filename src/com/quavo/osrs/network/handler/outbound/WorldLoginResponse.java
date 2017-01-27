@@ -24,7 +24,7 @@
  */
 package com.quavo.osrs.network.handler.outbound;
 
-import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.protocol.ClientMessage;
 import com.quavo.util.IsaacRandomPair;
 

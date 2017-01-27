@@ -22,25 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.codec.game;
+package com.quavo.osrs.game.model.entity.actor.player.info;
+
+import com.quavo.osrs.game.model.inter.DisplayMode;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public enum PacketState {
+public final class DisplayInformation {
 
 	/**
-	 * The packet id.
+	 * The display mode.
 	 */
-	READ_ID,
+	private DisplayMode displayMode;
 
 	/**
-	 * The packet size.
+	 * Gets the displayMode.
+	 * 
+	 * @return the displayMode
 	 */
-	READ_SIZE,
+	public DisplayMode getDisplayMode() {
+		return displayMode;
+	}
 
 	/**
-	 * The buffer payload.
+	 * Sets the displayMode.
+	 * 
+	 * @param displayMode the displayMode to set
 	 */
-	READ_PAYLOAD
+	public void setDisplayMode(DisplayMode displayMode) {
+		this.displayMode = displayMode;
+	}
+
 }

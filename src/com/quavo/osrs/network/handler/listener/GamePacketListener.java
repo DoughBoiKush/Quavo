@@ -25,12 +25,13 @@
 package com.quavo.osrs.network.handler.listener;
 
 import com.google.common.base.Preconditions;
-import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.handler.NetworkMessageListener;
 import com.quavo.osrs.network.handler.inbound.GamePacketRequest;
 import com.quavo.osrs.network.handler.outbound.GamePacketResponse;
 import com.quavo.osrs.network.protocol.packet.PacketRepository;
 import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.decode.PacketDecoder;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -42,18 +43,27 @@ public final class GamePacketListener implements NetworkMessageListener<GamePack
 
 	@Override
 	public void handleMessage(ChannelHandlerContext ctx, GamePacketRequest msg) {
-		System.out.println("INCOMING PACKET: " + msg.getId());
+		PacketDecoder packet = PacketRepository.getPacketDecoder(msg.getId());
+
+		if (packet == null) {
+			System.err.println("Unhandled incoming packet: " + msg.getId() + ".");
+			return;
+		}
+		
+		synchronized (ctx) {
+			packet.readPacket(msg.getPlayer(), msg.getId(), msg.getReader());
+		}
 	}
 
-	public static boolean sendGamePacket(Player player, PacketContext context) {
+	public static void sendGamePacket(Player player, PacketContext context) {
 		// safe cast
 		PacketEncoder<PacketContext> packet = (PacketEncoder<PacketContext>) PacketRepository.getPacketEncoder(context);
 		packet.encode(player, context);
 
 		Preconditions.checkArgument(packet.getId() != -1);
-
-		player.getChannel().write(new GamePacketResponse(packet));
-		return true;
+		synchronized (player.getChannel()) {
+			player.getChannel().write(new GamePacketResponse(packet));
+		}
 	}
 
 }

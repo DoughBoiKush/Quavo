@@ -24,8 +24,9 @@
  */
 package com.quavo.osrs.network.protocol.packet.decode;
 
-import com.quavo.osrs.game.node.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.protocol.packet.GamePacketReader;
+import com.quavo.osrs.network.protocol.packet.PacketIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -42,10 +43,10 @@ public interface PacketDecoder {
 	void readPacket(Player player, int packetId, GamePacketReader reader);
 
 	/**
-	 * Gets available packet ids for each incoming packet.
+	 * Gets available {@link PacketIdentifier}'s for each incoming packet.
 	 *
-	 * @return The packet ids.
+	 * @return The p{@link PacketIdentifier}'s.
 	 */
-	int[] packetIds();
+	PacketIdentifier[] identifiers();
 
 }

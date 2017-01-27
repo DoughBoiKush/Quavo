@@ -24,6 +24,7 @@
  */
 package com.quavo.osrs.network.handler.inbound;
 
+import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.handler.NetworkMessage;
 import com.quavo.osrs.network.protocol.packet.GamePacketReader;
 
@@ -33,6 +34,11 @@ import io.netty.channel.ChannelHandler;
  * @author _jordan <citellumrsps@gmail.com>
  */
 public final class GamePacketRequest extends NetworkMessage {
+
+	/**
+	 * The {@link Player}.
+	 */
+	private final Player player;
 
 	/**
 	 * The packet id.
@@ -48,13 +54,25 @@ public final class GamePacketRequest extends NetworkMessage {
 	 * Constructs a new object.
 	 * 
 	 * @param handler The {@link ChannelHandler} used for this request.
+	 * @param player The player.
 	 * @param id The packet id.
+	 * @param size The packet size.
 	 * @param reader The {@link GamePacketReader}.
 	 */
-	public GamePacketRequest(ChannelHandler handler, int id, GamePacketReader reader) {
+	public GamePacketRequest(ChannelHandler handler, Player player, int id, GamePacketReader reader) {
 		super(handler);
+		this.player = player;
 		this.id = id;
 		this.reader = reader;
+	}
+
+	/**
+	 * Gets the player.
+	 * 
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
 	}
 
 	/**
