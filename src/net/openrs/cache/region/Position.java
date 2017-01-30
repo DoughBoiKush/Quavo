@@ -29,7 +29,10 @@ package net.openrs.cache.region;
 public final class Position {
 
 	public static enum RegionSize {
-		DEFAULT(104), LARGE(120), XLARGE(136), XXLARGE(168);
+		DEFAULT(104),
+		LARGE(120),
+		XLARGE(136),
+		XXLARGE(168);
 
 		private final int size;
 
