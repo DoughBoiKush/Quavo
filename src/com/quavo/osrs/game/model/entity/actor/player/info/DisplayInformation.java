@@ -32,9 +32,46 @@ import com.quavo.osrs.game.model.inter.DisplayMode;
 public final class DisplayInformation {
 
 	/**
-	 * The display mode.
+	 * The {@link DisplayMode}.
 	 */
 	private DisplayMode displayMode;
+
+	/**
+	 * The screen width.
+	 */
+	private int width;
+
+	/**
+	 * The screen height.
+	 */
+	private int height;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param displayMode The {@link DisplayMode}.
+	 * @param width The screen width.
+	 * @param height The screen height.
+	 */
+	public DisplayInformation(DisplayMode displayMode, int width, int height) {
+		this.displayMode = displayMode;
+		this.width = width;
+		this.height = height;
+	}
+	
+	/**
+	 * @param resizable
+	 * @param width
+	 * @param height
+	 */
+	public void refresh(boolean resizable, int width, int height) {
+		this.width = width;
+		this.height = height;
+		
+		if (resizable) {
+			System.out.println("TRUE");
+		}
+	}
 
 	/**
 	 * Gets the displayMode.
@@ -42,6 +79,9 @@ public final class DisplayInformation {
 	 * @return the displayMode
 	 */
 	public DisplayMode getDisplayMode() {
+		if (displayMode == null) {
+			return DisplayMode.FIXED_MODE;
+		}
 		return displayMode;
 	}
 
@@ -52,6 +92,42 @@ public final class DisplayInformation {
 	 */
 	public void setDisplayMode(DisplayMode displayMode) {
 		this.displayMode = displayMode;
+	}
+
+	/**
+	 * Gets the width.
+	 * 
+	 * @return the width
+	 */
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * Sets the width.
+	 * 
+	 * @param width the width to set
+	 */
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	/**
+	 * Gets the height.
+	 * 
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * Sets the height.
+	 * 
+	 * @param height the height to set
+	 */
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 }

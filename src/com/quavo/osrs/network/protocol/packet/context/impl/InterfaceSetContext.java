@@ -22,74 +22,84 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.GamePacketBuilder;
 import com.quavo.osrs.network.protocol.packet.context.PacketContext;
-
-import io.netty.buffer.Unpooled;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public abstract class PacketEncoder<T extends PacketContext> {
+public final class InterfaceSetContext implements PacketContext {
 
 	/**
-	 * The {@link PacketEncoderIdentifier}.
+	 * The from interface.
 	 */
-	private final PacketEncoderIdentifier packet;
+	private final int fromInterfaceId;
 
 	/**
-	 * Represents the buffer for building the packet.
+	 * The from child.
 	 */
-	protected final GamePacketBuilder builder;
+	private final int fromChildId;
+
+	/**
+	 * The to interface.
+	 */
+	private final int toInterfaceId;
+
+	/**
+	 * The to child.
+	 */
+	private final int toChildId;
 
 	/**
 	 * Constructs a new object.
-	 *
-	 * @param packet The packet.
+	 * 
+	 * @param fromInterfaceId The starting interface id.
+	 * @param fromChildId The starting child id.
+	 * @param toInterfaceId The finishing interface id.
+	 * @param toChildId The finishing interface id.
 	 */
-	public PacketEncoder(PacketEncoderIdentifier packet) {
-		this.packet = packet;
-		this.builder = new GamePacketBuilder(Unpooled.buffer());
+	public InterfaceSetContext(int fromInterfaceId, int fromChildId, int toInterfaceId, int toChildId) {
+		this.fromInterfaceId = fromInterfaceId;
+		this.fromChildId = fromChildId;
+		this.toInterfaceId = toInterfaceId;
+		this.toChildId = toChildId;
 	}
 
 	/**
-	 * Constructs a new object.
+	 * Gets the fromInterfaceId.
 	 * 
-	 * @param packet The packet.
-	 * @param size The packet size.
+	 * @return the fromInterfaceId
 	 */
-	public PacketEncoder(PacketEncoderIdentifier packet, int size) {
-		this.packet = packet;
-		this.builder = new GamePacketBuilder(Unpooled.buffer(size));
+	public int getFromInterfaceId() {
+		return fromInterfaceId;
 	}
 
 	/**
-	 * Gets the packet.
+	 * Gets the fromChildId.
 	 * 
-	 * @return the packet
+	 * @return the fromChildId
 	 */
-	public PacketEncoderIdentifier getPacket() {
-		return packet;
+	public int getFromChildId() {
+		return fromChildId;
 	}
 
 	/**
-	 * Writes a packet.
-	 *
-	 * @param player The player.
-	 * @param context The packet wrapper.
+	 * Gets the toInterfaceId.
+	 * 
+	 * @return the toInterfaceId
 	 */
-	public abstract void encode(Player player, T context);
+	public int getToInterfaceId() {
+		return toInterfaceId;
+	}
 
 	/**
-	 * Gets the builder.
+	 * Gets the toChildId.
 	 * 
-	 * @return the builder
+	 * @return the toChildId
 	 */
-	public GamePacketBuilder getBuilder() {
-		return builder;
+	public int getToChildId() {
+		return toChildId;
 	}
 
 }

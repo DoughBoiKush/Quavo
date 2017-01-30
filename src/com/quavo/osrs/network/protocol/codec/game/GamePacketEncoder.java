@@ -57,11 +57,10 @@ public final class GamePacketEncoder extends MessageToByteEncoder<GamePacketResp
 	@Override
 	protected void encode(ChannelHandlerContext ctx, GamePacketResponse msg, ByteBuf out) throws Exception {
 		PacketEncoder<PacketContext> packet = msg.getPacket();
-		int id = packet.getId();
-		PacketType type = packet.getPacketType();
+		PacketType type = packet.getPacket().getType();
 		ByteBuf buffer = packet.getBuilder().getBuffer();
-		
-		out.writeByte(id/* + encoder.nextInt()*/);
+
+		out.writeByte(packet.getPacket().getId()/* + encoder.nextInt() */);
 		if (type == PacketType.VARIABLE_BYTE) {
 			out.writeByte(buffer.writerIndex());
 		} else if (type == PacketType.VARIABLE_SHORT) {

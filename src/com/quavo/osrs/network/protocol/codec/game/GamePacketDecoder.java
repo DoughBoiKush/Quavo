@@ -30,8 +30,8 @@ import java.util.Optional;
 import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.handler.inbound.GamePacketRequest;
 import com.quavo.osrs.network.protocol.packet.GamePacketReader;
-import com.quavo.osrs.network.protocol.packet.PacketIdentifier;
 import com.quavo.osrs.network.protocol.packet.PacketType;
+import com.quavo.osrs.network.protocol.packet.decode.PacketDecoderIdentifier;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -70,9 +70,9 @@ public final class GamePacketDecoder extends ByteToMessageDecoder {
 		while (in.readableBytes() > 0 && player.getChannel().isRegistered()) {
 
 			int opcode = in.readUnsignedByte();
-			Optional<PacketIdentifier> data = PacketIdentifier.getPacket(opcode);
+			Optional<PacketDecoderIdentifier> data = PacketDecoderIdentifier.getPacket(opcode);
 			if (data.isPresent()) {
-				PacketIdentifier packet = data.get();
+				PacketDecoderIdentifier packet = data.get();
 
 				int size = packet.getSize();
 				if (packet.getType() == PacketType.VARIABLE_BYTE) {
@@ -87,8 +87,15 @@ public final class GamePacketDecoder extends ByteToMessageDecoder {
 					size = in.readUnsignedShort();
 				}
 
-				ByteBuf payload = in.readBytes(new byte[size]);
-				out.add(new GamePacketRequest(this, player, packet.getId(), new GamePacketReader(payload)));
+				if (in.readableBytes() >= size) {
+					if (size < 0) {
+						return;
+					}
+
+					byte[] bytes = new byte[size];
+					ByteBuf payload = in.readBytes(bytes, 0, size);
+					out.add(new GamePacketRequest(this, player, packet.getId(), new GamePacketReader(payload)));
+				}
 
 			} else {
 				System.out.println("No data present for incoming packet: " + opcode + ".");

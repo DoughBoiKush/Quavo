@@ -7,14 +7,14 @@ package com.quavo.osrs.network.protocol.packet;
  */
 public enum AccessMode {
 
-    /**
-     * When in bit access mode, bits can be written and packed into bytes.
-     */
-    BIT_ACCESS,
+	/**
+	 * When in bit access mode, bits can be written and packed into bytes.
+	 */
+	BIT_ACCESS,
 
-    /**
-     * When in byte access modes, bytes are written directly to the buffer.
-     */
-    BYTE_ACCESS;
+	/**
+	 * When in byte access modes, bytes are written directly to the buffer.
+	 */
+	BYTE_ACCESS;
 
 }

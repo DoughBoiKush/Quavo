@@ -27,25 +27,26 @@ package com.quavo.osrs.network.protocol.packet.encode.impl;
 import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.protocol.packet.DataOrder;
 import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.InterfaceSetContext;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public final class InterfaceSetEncoder extends PacketEncoder<InterfaceSetContext> {
 
 	/**
 	 * Constructs a new object.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	public InterfaceSetEncoder() {
+		super(PacketEncoderIdentifier.INTERFACE_SET);
 	}
 
 	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	public void encode(Player player, InterfaceSetContext context) {
+		builder.put(DataType.INT, DataOrder.MIDDLE, (context.getToInterfaceId() << 16 | context.getToChildId()));
+		builder.put(DataType.INT, (context.getFromInterfaceId() << 16 | context.getFromChildId()));
 	}
 
 }

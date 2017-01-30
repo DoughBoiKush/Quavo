@@ -49,7 +49,7 @@ public final class GamePacketListener implements NetworkMessageListener<GamePack
 			System.err.println("Unhandled incoming packet: " + msg.getId() + ".");
 			return;
 		}
-		
+
 		synchronized (ctx) {
 			packet.readPacket(msg.getPlayer(), msg.getId(), msg.getReader());
 		}
@@ -60,7 +60,12 @@ public final class GamePacketListener implements NetworkMessageListener<GamePack
 		PacketEncoder<PacketContext> packet = (PacketEncoder<PacketContext>) PacketRepository.getPacketEncoder(context);
 		packet.encode(player, context);
 
-		Preconditions.checkArgument(packet.getId() != -1);
+		// for special cases.
+		if (packet.getPacket() == null) {
+			return;
+		}
+
+		Preconditions.checkArgument(packet.getPacket().getId() != -1);
 		synchronized (player.getChannel()) {
 			player.getChannel().write(new GamePacketResponse(packet));
 		}

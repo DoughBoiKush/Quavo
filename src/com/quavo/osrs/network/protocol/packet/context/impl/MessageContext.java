@@ -22,30 +22,78 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode.impl;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.DataOrder;
-import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public final class MessageContext implements PacketContext {
+
+	/**
+	 * The type of message being sent.
+	 */
+	private final int type;
+
+	/**
+	 * The message.
+	 */
+	private final String message;
+
+	/**
+	 * If the message is filtered.
+	 */
+	private final boolean filter;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param type The message type.
+	 * @param message The message.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	public MessageContext(int type, String message) {
+		this(type, message, false);
 	}
 
-	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param type The message type.
+	 * @param message The message.
+	 * @param filter If the message is filtered.
+	 */
+	public MessageContext(int type, String message, boolean filter) {
+		this.type = type;
+		this.message = message;
+		this.filter = filter;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * Gets the message.
+	 * 
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * Gets the filter.
+	 * 
+	 * @return the filter
+	 */
+	public boolean isFilter() {
+		return filter;
 	}
 
 }

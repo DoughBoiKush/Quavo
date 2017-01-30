@@ -22,20 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet;
+package com.quavo.osrs.network.protocol.packet.decode;
 
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.quavo.osrs.network.protocol.packet.PacketType;
+
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public enum PacketIdentifier {
+public enum PacketDecoderIdentifier {
 
-	/**
-	 * The keep alive packet. This keeps the client from disconnecting.
-	 */
 	PING(71, 0, PacketType.FIXED),
+	CLIENT_DISPLAY(104, 5, PacketType.FIXED),
 
 	/** UNKNOWN PACKETS */
 	P121(121, -1, PacketType.VARIABLE_BYTE),
@@ -64,20 +64,20 @@ public enum PacketIdentifier {
 	 * @param size The packet size.
 	 * @param type The {@link PacketType}.
 	 */
-	PacketIdentifier(int id, int size, PacketType type) {
+	PacketDecoderIdentifier(int id, int size, PacketType type) {
 		this.id = id;
 		this.size = size;
 		this.type = type;
 	}
-	
+
 	/**
 	 * Gets and returns a packet wrapped in a {@link Optional}.
 	 * 
 	 * @param id The id used for getting a packet type.
 	 * @return The packet type.
 	 */
-	public static Optional<PacketIdentifier> getPacket(int id) {
-		return Arrays.stream(PacketIdentifier.values()).filter(a -> a.id == id).findAny();
+	public static Optional<PacketDecoderIdentifier> getPacket(int id) {
+		return Arrays.stream(PacketDecoderIdentifier.values()).filter(a -> a.id == id).findAny();
 	}
 
 	/**

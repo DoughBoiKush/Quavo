@@ -51,16 +51,16 @@ public final class WorldLoginListener implements NetworkMessageListener<WorldLog
 
 		Player player = new Player(ctx.channel());
 		ctx.write(new WorldLoginResponse(player, message, msg.getIsaacPair()));
-		
 
 		ChannelPipeline pipeline = ctx.pipeline();
 		pipeline.remove("login.encoder");
-		
+
 		// this isnt set automatically.
 		pipeline.addBefore("adapter", "game.encoder", new GamePacketEncoder(msg.getIsaacPair().getEncoderRandom()));
 		pipeline.replace("world.decoder", "game.decoder", new GamePacketDecoder(player, msg.getIsaacPair().getDecoderRandom()));
-		
-		player.init();
+
+		player.init(msg.getDisplayInformation());
+		player.refresh();
 	}
 
 	/**

@@ -22,30 +22,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode.impl;
+package com.quavo.osrs.network.protocol.packet.encode;
 
-import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.DataOrder;
-import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
+import com.quavo.osrs.network.protocol.packet.PacketType;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public enum PacketEncoderIdentifier {
+
+	GAME_PANEL(92, PacketType.FIXED),
+	PING(195, PacketType.FIXED),
+	STATIC_REGION(17, PacketType.VARIABLE_SHORT),
+	INTERFACE_SET(80, PacketType.FIXED),
+	INTERFACE(82, PacketType.FIXED),
+	MESSAGE(32, PacketType.VARIABLE_BYTE),
+	FIXED_VARP(159, PacketType.FIXED),
+	STATIC_VARP(241, PacketType.FIXED),
+	VARP_RESET(11, PacketType.FIXED);
+
+	/**
+	 * The packet id.
+	 */
+	private final int id;
+
+	/**
+	 * The {@link PacketType}.
+	 */
+	private final PacketType type;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param id The packet id.
+	 * @param type The {@link PacketType}.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	PacketEncoderIdentifier(int id, PacketType type) {
+		this.id = id;
+		this.type = type;
 	}
 
-	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	/**
+	 * Gets the id.
+	 * 
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Gets the type.
+	 * 
+	 * @return the type
+	 */
+	public PacketType getType() {
+		return type;
 	}
 
 }

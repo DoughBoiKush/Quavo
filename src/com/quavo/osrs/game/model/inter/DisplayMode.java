@@ -35,12 +35,31 @@ public enum DisplayMode {
 	/**
 	 * Fixed screen display mode.
 	 */
-	FIXED_MODE,
+	FIXED_MODE(548),
 
 	/**
 	 * Resizable screen display mode.
 	 */
-	RESIZABLE_MODE;
+	RESIZABLE_MODE(161),
+
+	/**
+	 * Resizable with the flat panels.
+	 */
+	RESIZABLE_PANELS(164);
+
+	/**
+	 * The root interface id.
+	 */
+	private final int root;
+
+	/**
+	 * Constructs a new object.
+	 * 
+	 * @param root The root interface id.
+	 */
+	DisplayMode(int root) {
+		this.root = root;
+	}
 
 	/**
 	 * Gets and returns a connection type wrapped in a {@link Optional}.
@@ -59,6 +78,15 @@ public enum DisplayMode {
 	 */
 	public boolean isResizableMode() {
 		return (this == DisplayMode.RESIZABLE_MODE);
+	}
+
+	/**
+	 * Gets the root.
+	 * 
+	 * @return the root
+	 */
+	public int getRoot() {
+		return root;
 	}
 
 }
