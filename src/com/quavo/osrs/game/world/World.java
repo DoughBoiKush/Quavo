@@ -39,6 +39,6 @@ public final class World {
 	/**
 	 * The default position of each {@link Entity} in the world.
 	 */
-	public static final Position DEFAULT_POSITION = new Position(3222, 3222, 0);
+	public static final Position DEFAULT_POSITION = new Position(3093, 3493, 0);
 
 }

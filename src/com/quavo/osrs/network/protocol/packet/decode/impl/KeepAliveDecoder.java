@@ -26,9 +26,9 @@ package com.quavo.osrs.network.protocol.packet.decode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.protocol.packet.GamePacketReader;
-import com.quavo.osrs.network.protocol.packet.PacketIdentifier;
 import com.quavo.osrs.network.protocol.packet.context.impl.KeepAliveContext;
 import com.quavo.osrs.network.protocol.packet.decode.PacketDecoder;
+import com.quavo.osrs.network.protocol.packet.decode.PacketDecoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -41,8 +41,8 @@ public final class KeepAliveDecoder implements PacketDecoder {
 	}
 
 	@Override
-	public PacketIdentifier[] identifiers() {
-		return new PacketIdentifier[] { PacketIdentifier.PING };
+	public PacketDecoderIdentifier[] identifiers() {
+		return new PacketDecoderIdentifier[] { PacketDecoderIdentifier.PING, PacketDecoderIdentifier.P121 };
 	}
 
 }

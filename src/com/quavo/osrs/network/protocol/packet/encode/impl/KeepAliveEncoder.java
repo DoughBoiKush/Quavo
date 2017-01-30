@@ -25,9 +25,9 @@
 package com.quavo.osrs.network.protocol.packet.encode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.PacketType;
 import com.quavo.osrs.network.protocol.packet.context.impl.KeepAliveContext;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -41,7 +41,7 @@ public final class KeepAliveEncoder extends PacketEncoder<KeepAliveContext> {
 		/**
 		 * TODO FIND THE REAL PING PACKET.
 		 */
-		super(195, PacketType.FIXED);
+		super(PacketEncoderIdentifier.PING);
 	}
 
 	@Override

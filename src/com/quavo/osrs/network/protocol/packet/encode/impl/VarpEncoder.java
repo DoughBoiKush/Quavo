@@ -25,27 +25,30 @@
 package com.quavo.osrs.network.protocol.packet.encode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.DataOrder;
-import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.FixedVarpContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.StaticVarpContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.VarpContext;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public final class VarpEncoder extends PacketEncoder<VarpContext> {
 
 	/**
 	 * Constructs a new object.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	public VarpEncoder() {
+		super(null);
 	}
 
 	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	public void encode(Player player, VarpContext context) {
+		if (context.getValue() <= Byte.MIN_VALUE || context.getValue() >= Byte.MAX_VALUE) {
+			player.sendPacket(new StaticVarpContext(context));
+		} else {
+			player.sendPacket(new FixedVarpContext(context));
+		}
 	}
 
 }

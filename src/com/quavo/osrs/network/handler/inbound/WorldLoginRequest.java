@@ -25,9 +25,9 @@
 package com.quavo.osrs.network.handler.inbound;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.info.DisplayInformation;
 import com.quavo.osrs.game.model.entity.actor.player.info.LoginClearance;
 import com.quavo.osrs.game.model.entity.actor.player.info.MachineInformation;
-import com.quavo.osrs.game.model.inter.DisplayMode;
 import com.quavo.osrs.network.handler.NetworkMessage;
 import com.quavo.osrs.network.protocol.codec.login.LoginType;
 import com.quavo.util.IsaacRandomPair;
@@ -61,9 +61,9 @@ public final class WorldLoginRequest extends NetworkMessage {
 	private final LoginClearance clearance;
 
 	/**
-	 * The {@link DisplayMode} of the game client.
+	 * The {@link DisplayInformation} of the game client.
 	 */
-	private final DisplayMode displayMode;
+	private final DisplayInformation display;
 
 	/**
 	 * The {@link MachineInformation} of the user.
@@ -93,19 +93,19 @@ public final class WorldLoginRequest extends NetworkMessage {
 	 * @param username The username.
 	 * @param password The password.
 	 * @param clearance The login security clearance.
-	 * @param displayMode The display mode.
+	 * @param display The display mode.
 	 * @param machineInformation The machine information.
 	 * @param crc The crc.
 	 * @param token The game client token.
 	 * @param isaacPair The isaac random pair.
 	 */
-	public WorldLoginRequest(ChannelHandler handler, LoginType type, String username, String password, LoginClearance clearance, DisplayMode displayMode, MachineInformation machineInformation, int[] crc, String token, IsaacRandomPair isaacPair) {
+	public WorldLoginRequest(ChannelHandler handler, LoginType type, String username, String password, LoginClearance clearance, DisplayInformation display, MachineInformation machineInformation, int[] crc, String token, IsaacRandomPair isaacPair) {
 		super(handler);
 		this.type = type;
 		this.username = username;
 		this.password = password;
 		this.clearance = clearance;
-		this.displayMode = displayMode;
+		this.display = display;
 		this.machineInformation = machineInformation;
 		this.crc = crc;
 		this.token = token;
@@ -153,8 +153,8 @@ public final class WorldLoginRequest extends NetworkMessage {
 	 * 
 	 * @return the displayMode
 	 */
-	public DisplayMode getDisplayMode() {
-		return displayMode;
+	public DisplayInformation getDisplayInformation() {
+		return display;
 	}
 
 	/**

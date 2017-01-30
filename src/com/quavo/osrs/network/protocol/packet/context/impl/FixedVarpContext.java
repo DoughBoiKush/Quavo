@@ -22,30 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode.impl;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.DataOrder;
-import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
-import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public final class FixedVarpContext implements PacketContext {
+
+	/**
+	 * The {@link VarpContext}.
+	 */
+	private final VarpContext varp;
 
 	/**
 	 * Constructs a new object.
+	 * 
+	 * @param varp The varp.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	public FixedVarpContext(VarpContext varp) {
+		this.varp = varp;
 	}
 
-	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	/**
+	 * Gets the varp.
+	 * 
+	 * @return the varp
+	 */
+	public VarpContext getVarp() {
+		return varp;
 	}
 
 }

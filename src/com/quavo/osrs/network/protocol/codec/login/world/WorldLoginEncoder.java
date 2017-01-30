@@ -58,7 +58,7 @@ public final class WorldLoginEncoder extends MessageToByteEncoder<WorldLoginResp
 			out.writeShort(1);// index
 			out.writeByte(1);
 		}
-		
+
 		ctx.pipeline().remove(this);
 	}
 

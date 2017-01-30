@@ -25,27 +25,25 @@
 package com.quavo.osrs.network.protocol.packet.encode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.DataOrder;
-import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.VarpResetContext;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public final class VarpResetEncoder extends PacketEncoder<VarpResetContext> {
 
 	/**
 	 * Constructs a new object.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	public VarpResetEncoder() {
+		super(PacketEncoderIdentifier.VARP_RESET);
 	}
 
 	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	public void encode(Player player, VarpResetContext context) {
+		// Nothing to encode.
 	}
 
 }

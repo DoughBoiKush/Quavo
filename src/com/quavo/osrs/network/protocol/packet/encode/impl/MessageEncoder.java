@@ -25,27 +25,31 @@
 package com.quavo.osrs.network.protocol.packet.encode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.DataOrder;
 import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.MessageContext;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class GamePanelEncoder extends PacketEncoder<GamePanelContext> {
+public final class MessageEncoder extends PacketEncoder<MessageContext> {
 
 	/**
 	 * Constructs a new object.
 	 */
-	public GamePanelEncoder() {
-		super(PacketEncoderIdentifier.GAME_PANEL);
+	public MessageEncoder() {
+		super(PacketEncoderIdentifier.MESSAGE);
 	}
 
 	@Override
-	public void encode(Player player, GamePanelContext context) {
-		builder.put(DataType.SHORT, DataOrder.LITTLE, context.getId());
+	public void encode(Player player, MessageContext context) {
+		builder.putSmart(context.getType());
+		builder.put(DataType.BYTE, context.isFilter() ? 1 : 0);
+		if (context.isFilter()) {
+			builder.putString(null);// TODO
+		}
+		builder.putString(context.getMessage());
 	}
 
 }

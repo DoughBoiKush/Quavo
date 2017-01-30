@@ -28,9 +28,9 @@ import com.quavo.osrs.game.model.entity.actor.player.Player;
 import com.quavo.osrs.network.protocol.packet.DataOrder;
 import com.quavo.osrs.network.protocol.packet.DataTransformation;
 import com.quavo.osrs.network.protocol.packet.DataType;
-import com.quavo.osrs.network.protocol.packet.PacketType;
 import com.quavo.osrs.network.protocol.packet.context.impl.StaticRegionContext;
 import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -41,7 +41,7 @@ public final class StaticRegionEncoder extends PacketEncoder<StaticRegionContext
 	 * Constructs a new object.
 	 */
 	public StaticRegionEncoder() {
-		super(17, PacketType.VARIABLE_SHORT);
+		super(PacketEncoderIdentifier.STATIC_REGION);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public final class StaticRegionEncoder extends PacketEncoder<StaticRegionContext
 
 		int chunkX = player.getPosition().getChunkX();
 		int chunkY = player.getPosition().getChunkY();
-		
+
 		builder.put(DataType.SHORT, DataOrder.LITTLE, DataTransformation.ADD, chunkY);
 		builder.put(DataType.SHORT, DataOrder.LITTLE, chunkX);
 		builder.put(DataType.SHORT, 9);

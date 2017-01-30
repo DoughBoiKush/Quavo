@@ -27,6 +27,7 @@ package com.quavo.osrs.network.protocol.codec.login.world;
 import java.math.BigInteger;
 import java.util.List;
 
+import com.quavo.osrs.game.model.entity.actor.player.info.DisplayInformation;
 import com.quavo.osrs.game.model.entity.actor.player.info.LoginClearance;
 import com.quavo.osrs.game.model.entity.actor.player.info.MachineInformation;
 import com.quavo.osrs.game.model.inter.DisplayMode;
@@ -91,8 +92,9 @@ public final class WorldLoginDecoder extends ByteToMessageDecoder {
 		buffer = ByteBufUtils.decipherXTEA(in, clientKeys);
 		String username = ByteBufUtils.readString(buffer);
 		DisplayMode mode = DisplayMode.getDisplayMode(buffer.readByte()).get();
-		buffer.readShort();
-		buffer.readShort();
+		int width = buffer.readShort();
+		int height = buffer.readShort();
+		DisplayInformation display = new DisplayInformation(mode, width, height);
 		buffer.skipBytes(24);
 		String token = ByteBufUtils.readString(buffer);
 		buffer.readInt();
@@ -112,7 +114,7 @@ public final class WorldLoginDecoder extends ByteToMessageDecoder {
 		}
 		IsaacRandomPair isaacPair = new IsaacRandomPair(new IsaacRandom(serverKeys), new IsaacRandom(clientKeys));
 
-		out.add(new WorldLoginRequest(this, type, username, password, clearance, mode, machineInformation, crc, token, isaacPair));
+		out.add(new WorldLoginRequest(this, type, username, password, clearance, display, machineInformation, crc, token, isaacPair));
 	}
 
 }

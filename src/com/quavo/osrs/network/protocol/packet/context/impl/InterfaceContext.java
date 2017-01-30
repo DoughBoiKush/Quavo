@@ -22,74 +22,84 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.GamePacketBuilder;
 import com.quavo.osrs.network.protocol.packet.context.PacketContext;
-
-import io.netty.buffer.Unpooled;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public abstract class PacketEncoder<T extends PacketContext> {
+public final class InterfaceContext implements PacketContext {
 
 	/**
-	 * The {@link PacketEncoderIdentifier}.
+	 * The game panel.
 	 */
-	private final PacketEncoderIdentifier packet;
+	private final int panelId;
 
 	/**
-	 * Represents the buffer for building the packet.
+	 * The interface id.
 	 */
-	protected final GamePacketBuilder builder;
+	private final int interfaceId;
+
+	/**
+	 * The panel child id.
+	 */
+	private final int childId;
+
+	/**
+	 * Represents if the interface is set to be fixed or static on the game panel.
+	 */
+	private final boolean fixed;
 
 	/**
 	 * Constructs a new object.
 	 *
-	 * @param packet The packet.
+	 * @param panelId The game panel id.
+	 * @param interfaceId The interface id.
+	 * @param childId The panel child id.
+	 * @param fixed If the interface is fixed on the panel.
 	 */
-	public PacketEncoder(PacketEncoderIdentifier packet) {
-		this.packet = packet;
-		this.builder = new GamePacketBuilder(Unpooled.buffer());
+	public InterfaceContext(int panelId, int interfaceId, int childId, boolean fixed) {
+		this.panelId = panelId;
+		this.interfaceId = interfaceId;
+		this.childId = childId;
+		this.fixed = fixed;
 	}
 
 	/**
-	 * Constructs a new object.
+	 * Gets the panelId.
 	 * 
-	 * @param packet The packet.
-	 * @param size The packet size.
+	 * @return the panelId
 	 */
-	public PacketEncoder(PacketEncoderIdentifier packet, int size) {
-		this.packet = packet;
-		this.builder = new GamePacketBuilder(Unpooled.buffer(size));
+	public int getPanelId() {
+		return panelId;
 	}
 
 	/**
-	 * Gets the packet.
+	 * Gets the interfaceId.
 	 * 
-	 * @return the packet
+	 * @return the interfaceId
 	 */
-	public PacketEncoderIdentifier getPacket() {
-		return packet;
+	public int getInterfaceId() {
+		return interfaceId;
 	}
 
 	/**
-	 * Writes a packet.
-	 *
-	 * @param player The player.
-	 * @param context The packet wrapper.
+	 * Gets the childId.
+	 * 
+	 * @return the childId
 	 */
-	public abstract void encode(Player player, T context);
+	public int getChildId() {
+		return childId;
+	}
 
 	/**
-	 * Gets the builder.
+	 * Gets the fixed.
 	 * 
-	 * @return the builder
+	 * @return the fixed
 	 */
-	public GamePacketBuilder getBuilder() {
-		return builder;
+	public boolean isFixed() {
+		return fixed;
 	}
 
 }
