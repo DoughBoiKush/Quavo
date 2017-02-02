@@ -34,6 +34,7 @@ import com.quavo.osrs.network.protocol.packet.PacketType;
 import com.quavo.osrs.network.protocol.packet.decode.PacketDecoderIdentifier;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import net.burtleburtle.bob.rand.IsaacRandom;
@@ -67,40 +68,40 @@ public final class GamePacketDecoder extends ByteToMessageDecoder {
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		while (in.readableBytes() > 0 && player.getChannel().isRegistered()) {
+		if (!in.isReadable() || !player.getChannel().isRegistered()) {
+			return;
+		}
+		int opcode = in.readUnsignedByte();
+		Optional<PacketDecoderIdentifier> data = PacketDecoderIdentifier.getPacket(opcode);
+		if (data.isPresent()) {
+			PacketDecoderIdentifier packet = data.get();
 
-			int opcode = in.readUnsignedByte();
-			Optional<PacketDecoderIdentifier> data = PacketDecoderIdentifier.getPacket(opcode);
-			if (data.isPresent()) {
-				PacketDecoderIdentifier packet = data.get();
-
-				int size = packet.getSize();
-				if (packet.getType() == PacketType.VARIABLE_BYTE) {
-					if (in.readableBytes() < 1) {
-						return;
-					}
-					size = in.readUnsignedByte();
-				} else if (packet.getType() == PacketType.VARIABLE_SHORT) {
-					if (in.readableBytes() < 2) {
-						return;
-					}
-					size = in.readUnsignedShort();
+			int size = packet.getSize();
+			if (packet.getType() == PacketType.VARIABLE_BYTE) {
+				if (in.readableBytes() < 1) {
+					return;
 				}
-
-				if (in.readableBytes() >= size) {
-					if (size < 0) {
-						return;
-					}
-
-					byte[] bytes = new byte[size];
-					ByteBuf payload = in.readBytes(bytes, 0, size);
-					out.add(new GamePacketRequest(this, player, packet.getId(), new GamePacketReader(payload)));
+				size = in.readUnsignedByte();
+			} else if (packet.getType() == PacketType.VARIABLE_SHORT) {
+				if (in.readableBytes() < 2) {
+					return;
 				}
-
-			} else {
-				System.out.println("No data present for incoming packet: " + opcode + ".");
-				in.readBytes(new byte[in.readableBytes()]);
+				size = in.readUnsignedShort();
 			}
+
+			if (in.readableBytes() >= size) {
+				if (size < 0) {
+					return;
+				}
+
+				byte[] bytes = new byte[size];
+				in.readBytes(bytes, 0, size);
+				out.add(new GamePacketRequest(this, player, packet.getId(), new GamePacketReader(Unpooled.wrappedBuffer(bytes))));
+			}
+
+		} else {
+			System.out.println("No data present for incoming packet: " + opcode + ".");
+			in.readBytes(new byte[in.readableBytes()]);
 		}
 	}
 

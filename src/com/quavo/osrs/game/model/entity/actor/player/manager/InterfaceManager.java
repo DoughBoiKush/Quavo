@@ -29,7 +29,6 @@ import com.quavo.osrs.game.model.entity.actor.player.info.DisplayInformation;
 import com.quavo.osrs.game.model.inter.DisplayMode;
 import com.quavo.osrs.network.protocol.packet.context.impl.GamePanelContext;
 import com.quavo.osrs.network.protocol.packet.context.impl.InterfaceContext;
-import com.quavo.osrs.network.protocol.packet.context.impl.InterfaceSetContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
@@ -63,11 +62,12 @@ public final class InterfaceManager {
 	public void login(DisplayInformation info) {
 		this.displayInformation = info;
 
-		DisplayMode mode = displayInformation.getDisplayMode();
 		sendGamePanel(165);
 		sendInterface(165, 162, 1, true);
 		sendInterface(165, 163, 22, true);
 		sendInterface(165, 160, 23, true);
+		sendInterface(165, 378, 28, false);
+		sendInterface(165, 50, 27, false);
 		sendInterface(165, 593, 7, true);
 		sendInterface(165, 320, 8, true);
 		sendInterface(165, 76, 9, true);
@@ -82,20 +82,27 @@ public final class InterfaceManager {
 		sendInterface(165, 261, 18, true);
 		sendInterface(165, 216, 19, true);
 		sendInterface(165, 239, 20, true);
-		switch (mode) {
+	}
+
+	/**
+	 * Refreshes the interfaces per {@link DisplayMode} after a login.
+	 */
+	public void refresh() {
+		System.out.println("HEY");
+//		sendGamePanel(displayInformation.getDisplayMode().getRoot());
+		switch (displayInformation.getDisplayMode()) {
 		case FIXED_MODE:
 			break;
 		case RESIZABLE_MODE:
 			break;
 		case RESIZABLE_PANELS:
-			player.sendPacket(new InterfaceSetContext(165, 23, 164, 21));// orbs
-			player.sendPacket(new InterfaceSetContext(165, 1, 164, 24));// chat
-			for (int i = 1; i <= 14; i++) {// tabs
-				player.sendPacket(new InterfaceSetContext(165, i + 6, 164, i + 58));
-			}
+//			for (int i = 1; i <= 14; i++) {// tabs
+//				player.sendPacket(new InterfaceSetContext(165, i + 6, 164, i + 58));
+//			}
+//			player.sendPacket(new InterfaceSetContext(165, 23, 164, 21));// orbs
+//			player.sendPacket(new InterfaceSetContext(165, 1, 164, 24));// chat
 			break;
 		}
-		sendGamePanel(mode.getRoot());
 	}
 
 	/**

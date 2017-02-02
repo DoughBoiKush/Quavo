@@ -22,64 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode;
-
-import com.quavo.osrs.network.protocol.packet.PacketType;
+package com.quavo.util;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public enum PacketEncoderIdentifier {
-
-	GAME_PANEL(92, PacketType.FIXED),
-	PING(195, PacketType.FIXED),
-	STATIC_REGION(17, PacketType.VARIABLE_SHORT),
-	INTERFACE_SET(80, PacketType.FIXED),
-	INTERFACE(82, PacketType.FIXED),
-	MESSAGE(32, PacketType.VARIABLE_BYTE),
-	FIXED_VARP(159, PacketType.FIXED),
-	STATIC_VARP(241, PacketType.FIXED),
-	VARP_RESET(11, PacketType.FIXED),
-	CS2_SCRIPT(83, PacketType.VARIABLE_SHORT),
-	CLIENT_ADDRESS(166, PacketType.FIXED);
+public final class Utilities {
 
 	/**
-	 * The packet id.
-	 */
-	private final int id;
-
-	/**
-	 * The {@link PacketType}.
-	 */
-	private final PacketType type;
-
-	/**
-	 * Constructs a new object.
+	 * Converts a ip address {@link String} to int format.
 	 * 
-	 * @param id The packet id.
-	 * @param type The {@link PacketType}.
+	 * @param address The ip address.
+	 * @return The int format.
 	 */
-	PacketEncoderIdentifier(int id, PacketType type) {
-		this.id = id;
-		this.type = type;
-	}
+	public static int addressToInteger(String address) {
+		String[] array = address.split("\\.");
+		int result = 0;
+		for (int i = 0; i < array.length; i++) {
+			int power = 3 - i;
+			result += ((Integer.parseInt(array[i]) % 256 * Math.pow(256, power)));
 
-	/**
-	 * Gets the id.
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public PacketType getType() {
-		return type;
+		}
+		return result;
 	}
 
 }

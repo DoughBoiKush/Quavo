@@ -56,11 +56,10 @@ public final class WorldLoginListener implements NetworkMessageListener<WorldLog
 		pipeline.remove("login.encoder");
 
 		// this isnt set automatically.
-		pipeline.addBefore("adapter", "game.encoder", new GamePacketEncoder(msg.getIsaacPair().getEncoderRandom()));
+		pipeline.addAfter("world.decoder", "game.encoder", new GamePacketEncoder(msg.getIsaacPair().getEncoderRandom()));
 		pipeline.replace("world.decoder", "game.decoder", new GamePacketDecoder(player, msg.getIsaacPair().getDecoderRandom()));
 
 		player.init(msg.getDisplayInformation());
-		player.refresh();
 	}
 
 	/**

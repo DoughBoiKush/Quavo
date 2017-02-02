@@ -22,64 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode;
+package com.quavo.osrs.network.protocol.packet.encode.impl;
 
-import com.quavo.osrs.network.protocol.packet.PacketType;
+import com.quavo.osrs.game.model.entity.actor.player.Player;
+import com.quavo.osrs.network.protocol.packet.DataType;
+import com.quavo.osrs.network.protocol.packet.context.impl.ClientAddressContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public enum PacketEncoderIdentifier {
-
-	GAME_PANEL(92, PacketType.FIXED),
-	PING(195, PacketType.FIXED),
-	STATIC_REGION(17, PacketType.VARIABLE_SHORT),
-	INTERFACE_SET(80, PacketType.FIXED),
-	INTERFACE(82, PacketType.FIXED),
-	MESSAGE(32, PacketType.VARIABLE_BYTE),
-	FIXED_VARP(159, PacketType.FIXED),
-	STATIC_VARP(241, PacketType.FIXED),
-	VARP_RESET(11, PacketType.FIXED),
-	CS2_SCRIPT(83, PacketType.VARIABLE_SHORT),
-	CLIENT_ADDRESS(166, PacketType.FIXED);
-
-	/**
-	 * The packet id.
-	 */
-	private final int id;
-
-	/**
-	 * The {@link PacketType}.
-	 */
-	private final PacketType type;
+public final class ClientAddressEncoder extends PacketEncoder<ClientAddressContext> {
 
 	/**
 	 * Constructs a new object.
-	 * 
-	 * @param id The packet id.
-	 * @param type The {@link PacketType}.
 	 */
-	PacketEncoderIdentifier(int id, PacketType type) {
-		this.id = id;
-		this.type = type;
+	public ClientAddressEncoder() {
+		super(PacketEncoderIdentifier.CLIENT_ADDRESS);
 	}
 
-	/**
-	 * Gets the id.
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Gets the type.
-	 * 
-	 * @return the type
-	 */
-	public PacketType getType() {
-		return type;
+	@Override
+	public void encode(Player player, ClientAddressContext context) {
+		builder.put(DataType.INT, context.getAddress());
 	}
 
 }
