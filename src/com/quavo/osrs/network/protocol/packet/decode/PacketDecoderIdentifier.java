@@ -40,7 +40,9 @@ public enum PacketDecoderIdentifier {
 	/** UNKNOWN PACKETS */
 	P121(121, -1, PacketType.VARIABLE_BYTE),
 	P62(62, 1, PacketType.FIXED),
-	P148(148, 6, PacketType.FIXED);
+	P148(148, 6, PacketType.FIXED),
+	P60(60, 0, PacketType.FIXED),
+	P95(95, 6, PacketType.FIXED);
 
 	/**
 	 * The id for each packet.

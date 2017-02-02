@@ -25,6 +25,9 @@
 package com.quavo.osrs.network.protocol.packet.decode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
+import com.quavo.osrs.game.model.entity.actor.player.manager.InterfaceManager;
+import com.quavo.osrs.game.model.inter.DisplayMode;
+import com.quavo.osrs.network.protocol.packet.DataType;
 import com.quavo.osrs.network.protocol.packet.GamePacketReader;
 import com.quavo.osrs.network.protocol.packet.decode.PacketDecoder;
 import com.quavo.osrs.network.protocol.packet.decode.PacketDecoderIdentifier;
@@ -36,7 +39,15 @@ public final class ClientDisplayDecoder implements PacketDecoder {
 
 	@Override
 	public void readPacket(Player player, int packetId, GamePacketReader reader) {
-		
+		DisplayMode mode = DisplayMode.getDisplayMode((int) reader.getSigned(DataType.BYTE)).get();
+		int width = (int) reader.getUnsigned(DataType.SHORT);
+		int height = (int) reader.getUnsigned(DataType.SHORT);
+
+		if (player.isOnline()) {
+			InterfaceManager manager = player.getInterfaceManager();
+			manager.getDisplayInformation().setDisplayInformation(mode, width, height);
+			manager.refresh();
+		}
 	}
 
 	@Override

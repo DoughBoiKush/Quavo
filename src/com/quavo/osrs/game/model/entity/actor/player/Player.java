@@ -31,8 +31,8 @@ import com.quavo.osrs.game.model.entity.actor.player.manager.SocialManager;
 import com.quavo.osrs.game.world.region.Viewport;
 import com.quavo.osrs.network.handler.listener.GamePacketListener;
 import com.quavo.osrs.network.protocol.packet.context.PacketContext;
+import com.quavo.osrs.network.protocol.packet.context.impl.ClientAddressContext;
 import com.quavo.osrs.network.protocol.packet.context.impl.StaticRegionContext;
-import com.quavo.osrs.network.protocol.packet.context.impl.VarpContext;
 import com.quavo.osrs.network.protocol.packet.context.impl.VarpResetContext;
 
 import io.netty.channel.Channel;
@@ -83,7 +83,9 @@ public final class Player extends Actor {
 	 */
 	public void init(DisplayInformation info) {
 		sendPacket(new StaticRegionContext(true));
+		sendPacket(new ClientAddressContext("127.0.0.1"));
 		interfaceManager.login(info);
+		refresh();
 	}
 
 	/**
@@ -91,72 +93,7 @@ public final class Player extends Actor {
 	 */
 	public void refresh() {
 		sendPacket(new VarpResetContext());
-		sendVarp(18, 1);
-		sendVarp(21, 67108864);
-		sendVarp(22, 33554432);
-		sendVarp(23, 64);
-		sendVarp(43, 1);
-		sendVarp(101, 0);
-		sendVarp(166, 2);
-		sendVarp(167, 0);
-		sendVarp(168, 4);
-		sendVarp(169, 4);
-		sendVarp(170, 0);
-		sendVarp(171, 0);
-		sendVarp(173, 1);
-		sendVarp(281, 1000);
-		sendVarp(287, 0);
-		sendVarp(300, 1000);
-		sendVarp(406, 20);
-		sendVarp(447, -1);
-		sendVarp(486, 1073741824);
-		sendVarp(520, 1);
-		sendVarp(553, -2147483648);
-		sendVarp(788, 128);
-		sendVarp(810, 33554432);
-		sendVarp(830, 4194304);
-		sendVarp(849, -1);
-		sendVarp(850, -1);
-		sendVarp(851, -1);
-		sendVarp(852, -1);
-		sendVarp(853, -1);
-		sendVarp(854, -1);
-		sendVarp(855, -1);
-		sendVarp(856, -1);
-		sendVarp(872, 4);
-		sendVarp(904, 246);
-		sendVarp(913, 4194304);
-		sendVarp(951, -1);
-		sendVarp(952, -1);
-		sendVarp(953, -1);
-		sendVarp(954, -1);
-		sendVarp(955, -1);
-		sendVarp(956, -1);
-		sendVarp(959, -1);
-		sendVarp(960, -1);
-		sendVarp(961, -1);
-		sendVarp(962, -1);
-		sendVarp(963, -1);
-		sendVarp(1010, 2048);
-		sendVarp(1017, 8192);
-		sendVarp(1050, 4096);
-		sendVarp(1055, 256);
-		sendVarp(1065, -1);
-		sendVarp(1067, -1711276032);
-		sendVarp(1074, 0);
-		sendVarp(1075, -1);
-		sendVarp(1107, 0);
-		sendVarp(1151, -1);
-		sendVarp(1224, 172395585);
-		sendVarp(1225, 379887846);
-		sendVarp(1226, 12);
 		sendGameMessage("Welcome to Quavo OSRS [#131].");
-		
-		online = true;
-	}
-
-	private void sendVarp(int id, int value) {
-		sendPacket(new VarpContext(id, value));
 	}
 
 	/**

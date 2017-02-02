@@ -58,19 +58,18 @@ public final class DisplayInformation {
 		this.width = width;
 		this.height = height;
 	}
-	
+
 	/**
-	 * @param resizable
-	 * @param width
-	 * @param height
+	 * Sets the display information of a game client.
+	 * 
+	 * @param mode The {@link DisplayMode}.
+	 * @param width The game width.
+	 * @param height The game height.
 	 */
-	public void refresh(boolean resizable, int width, int height) {
+	public void setDisplayInformation(DisplayMode mode, int width, int height) {
+		this.displayMode = mode;
 		this.width = width;
 		this.height = height;
-		
-		if (resizable) {
-			System.out.println("TRUE");
-		}
 	}
 
 	/**

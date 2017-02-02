@@ -50,9 +50,7 @@ public final class GamePacketListener implements NetworkMessageListener<GamePack
 			return;
 		}
 
-		synchronized (ctx) {
-			packet.readPacket(msg.getPlayer(), msg.getId(), msg.getReader());
-		}
+		packet.readPacket(msg.getPlayer(), msg.getId(), msg.getReader());
 	}
 
 	public static void sendGamePacket(Player player, PacketContext context) {
@@ -66,9 +64,7 @@ public final class GamePacketListener implements NetworkMessageListener<GamePack
 		}
 
 		Preconditions.checkArgument(packet.getPacket().getId() != -1);
-		synchronized (player.getChannel()) {
-			player.getChannel().write(new GamePacketResponse(packet));
-		}
+		player.getChannel().write(new GamePacketResponse(packet));
 	}
 
 }

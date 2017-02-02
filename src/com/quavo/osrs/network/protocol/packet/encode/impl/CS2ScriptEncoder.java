@@ -22,27 +22,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.decode.impl;
+package com.quavo.osrs.network.protocol.packet.encode.impl;
 
 import com.quavo.osrs.game.model.entity.actor.player.Player;
-import com.quavo.osrs.network.protocol.packet.GamePacketReader;
-import com.quavo.osrs.network.protocol.packet.context.impl.KeepAliveContext;
-import com.quavo.osrs.network.protocol.packet.decode.PacketDecoder;
-import com.quavo.osrs.network.protocol.packet.decode.PacketDecoderIdentifier;
+import com.quavo.osrs.network.protocol.packet.DataType;
+import com.quavo.osrs.network.protocol.packet.context.impl.CS2ScriptContext;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoder;
+import com.quavo.osrs.network.protocol.packet.encode.PacketEncoderIdentifier;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public final class KeepAliveDecoder implements PacketDecoder {
+public final class CS2ScriptEncoder extends PacketEncoder<CS2ScriptContext> {
 
-	@Override
-	public void readPacket(Player player, int packetId, GamePacketReader reader) {
-		player.sendPacket(new KeepAliveContext());
+	/**
+	 * Constructs a new object.
+	 */
+	public CS2ScriptEncoder() {
+		super(PacketEncoderIdentifier.CS2_SCRIPT);
 	}
 
 	@Override
-	public PacketDecoderIdentifier[] identifiers() {
-		return new PacketDecoderIdentifier[] { PacketDecoderIdentifier.PING };
+	public void encode(Player player, CS2ScriptContext context) {
+		String arguments = "";
+
+		if (context.getArguments() != null) {
+			for (int index = context.getArguments().length - 1; index >= 0; index--) {
+				if (context.getArguments()[index] instanceof String) {
+					arguments += "s";
+				} else {
+					arguments += "i";
+				}
+			}
+		}
+		
+		builder.putString(arguments);
+
+		if (context.getArguments() != null) {
+			int argument = 0;
+			for (int index = arguments.length() - 1; index >= 0; index--) {
+				if (arguments.charAt(index) == 's') {
+					builder.putString((String) context.getArguments()[argument++]);
+				} else {
+					builder.put(DataType.INT, (Integer) context.getArguments()[argument++]);
+				}
+			}
+		}
+		
+		builder.put(DataType.INT, context.getId());
 	}
 
 }

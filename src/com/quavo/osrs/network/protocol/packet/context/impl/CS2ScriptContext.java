@@ -22,46 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.quavo.osrs.network.protocol.packet.encode;
+package com.quavo.osrs.network.protocol.packet.context.impl;
 
-import com.quavo.osrs.network.protocol.packet.PacketType;
+import com.quavo.osrs.network.protocol.packet.context.PacketContext;
 
 /**
  * @author _jordan <citellumrsps@gmail.com>
  */
-public enum PacketEncoderIdentifier {
-
-	GAME_PANEL(92, PacketType.FIXED),
-	PING(195, PacketType.FIXED),
-	STATIC_REGION(17, PacketType.VARIABLE_SHORT),
-	INTERFACE_SET(80, PacketType.FIXED),
-	INTERFACE(82, PacketType.FIXED),
-	MESSAGE(32, PacketType.VARIABLE_BYTE),
-	FIXED_VARP(159, PacketType.FIXED),
-	STATIC_VARP(241, PacketType.FIXED),
-	VARP_RESET(11, PacketType.FIXED),
-	CS2_SCRIPT(83, PacketType.VARIABLE_SHORT),
-	CLIENT_ADDRESS(166, PacketType.FIXED);
+public final class CS2ScriptContext implements PacketContext {
 
 	/**
-	 * The packet id.
+	 * The script id.
 	 */
 	private final int id;
 
 	/**
-	 * The {@link PacketType}.
+	 * The script arguments.
 	 */
-	private final PacketType type;
+	private final Object[] arguments;
 
 	/**
 	 * Constructs a new object.
 	 * 
-	 * @param id The packet id.
-	 * @param type The {@link PacketType}.
+	 * @param id The id.
+	 * @param arguments The arguments.
 	 */
-	PacketEncoderIdentifier(int id, PacketType type) {
+	public CS2ScriptContext(int id, Object... arguments) {
 		this.id = id;
-		this.type = type;
+		this.arguments = arguments;
 	}
 
 	/**
@@ -74,12 +62,12 @@ public enum PacketEncoderIdentifier {
 	}
 
 	/**
-	 * Gets the type.
+	 * Gets the arguments.
 	 * 
-	 * @return the type
+	 * @return the arguments
 	 */
-	public PacketType getType() {
-		return type;
+	public Object[] getArguments() {
+		return arguments;
 	}
 
 }
